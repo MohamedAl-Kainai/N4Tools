@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="python-N4",
-    version="0.1",
+    name="N4Tools",
+    version="1.1",
     author="Example Author",
     author_email="mohammedkainaiahmaed@gmail.com",
     description="Style for ( Termux & Kali ) tools...",

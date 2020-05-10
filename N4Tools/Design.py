@@ -366,14 +366,9 @@ class Animation:
 
     # to write text by Line as slow motion
     def SlowLine(text,t=0.5,end=False):
-        style = [ _+'\n' for _ in text.split('\n')]
-        for i in style:
+        for i in text.split('\n'):
+            print(i,end='\n' if end == False else end if text.split('\n')[-1] == i else '\n')
             time.sleep(t)
-            print(i[0:-1] if i == style[-1] else i,end='')
-        if end:
-            print(Color.reader(end),end='')
-        elif end == False:
-            pass
 
     # python for ever...-
     def Text(CLT=G,CUT=W,t=0.2,text='C#tB#eG#xP#t',AT='Animation',repeat=2,end=False):
