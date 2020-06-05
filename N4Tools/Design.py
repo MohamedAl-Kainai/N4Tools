@@ -2,11 +2,6 @@ import time ,sys ,os
 
 class Color:
     Colors = {
-            "##":"\033[0m", # Normal
-            "BB#":"\033[1m", # Bold/Bright
-            "UL#":"\033[4m", # Underlined
-            "B*#":"\033[5m", # Blink
-
             # Dark
             "W#":"\033[0;37m", # Wihte
             "R#":"\033[0;31m", # Red
@@ -15,6 +10,7 @@ class Color:
             "B#":"\033[0;34m", # Blue
             "P#":"\033[0;35m", # Pink
             "C#":"\033[0;36m", # Cyan
+            "g#":"\033[1;30m", # Gray
 
             # Light
             "WL#":"\033[1;37m", # Wihte
@@ -43,6 +39,11 @@ class Color:
             "PL@":"\033[105m", # bg Light Pink
             "CL@":"\033[106m", # bg Light Cyan
             "gL@":"\033[100m", # bg Light Light gray
+
+            "##":"\033[0m", # Normal
+            "BB#":"\033[1m", # Bold/Bright
+            "UL#":"\033[4m", # Underlined
+            "B*#":"\033[5m", # Blink
     }
     @classmethod
     def reader(cls,text):
@@ -194,7 +195,7 @@ class ProFunctions:
         style += Colors+SQ[0]+SQ[7]*Width+SQ[6]
         for i in Sides:
             L = len(Color.del_colors(i))
-            style += '\n'+Colors+SQ[1]+W+i+' '*(Width-L)+Colors+SQ[5]
+            style += '\n'+Colors+SQ[1]+'\033[0m'+i+' '*(Width-L)+Colors+SQ[5]
         style += '\n'+Colors+SQ[2]+SQ[3]*Width+SQ[4]
         return Text(True).DS(style)
 
