@@ -1,11 +1,12 @@
 import setuptools
+from N4Tools import __version__
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="N4Tools",
-    version="1.1",
+    version=__version__,
     author="Example Author",
     author_email="mohammedkainaiahmaed@gmail.com",
     description="Style for ( Termux & Kali ) tools...",

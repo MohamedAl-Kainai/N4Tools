@@ -1,69 +1,102 @@
 import time ,sys ,os
 
-# color...
-BL,Bl,R,G,Y,B,P,C,W = [
-    '\033[0;30m', # black
-    '\033[1;30m', # grey
-    '\033[0;31m', # red
-    '\033[0;32m', # green
-    '\033[0;33m', # yellow
-    '\033[0;34m', # blue
-    '\033[0;35m', # purple
-    '\033[0;36m', # cyan
-    '\033[0;37m', # white
-]
 class Color:
-    clm = []
-    clb = [BL,Bl,R,G,Y,B,P,C,W]
-    def reader(text):
-        text = text.replace('Bl#',Color.clb[1])
-        text = text.replace('R#',Color.clb[2])
-        text = text.replace('G#',Color.clb[3])
-        text = text.replace('Y#',Color.clb[4])
-        text = text.replace('B#',Color.clb[5])
-        text = text.replace('P#',Color.clb[6])
-        text = text.replace('C#',Color.clb[7])
-        text = text.replace('W#',Color.clb[8])
-        return text
+    Colors = {
+            "##":"\033[0m", # Normal
+            "BB#":"\033[1m", # Bold/Bright
+            "UL#":"\033[4m", # Underlined
+            "B*#":"\033[5m", # Blink
 
-    def remove_c(self,text):
-        remove_c = [BL,Bl,R,G,Y,B,P,C,W]+self.clm+[
-            '\033[1;30m', # grey
-            '\033[1;31m', # red
-            '\033[1;32m', # green
-            '\033[1;33m', # yellow
-            '\033[1;34m', # blue
-            '\033[1;35m', # purple
-            '\033[1;36m', # cyan
-            '\033[1;37m', # white
-        ]
-        for i in remove_c:
-            text = text.replace(i,'')
+            # Dark
+            "W#":"\033[0;37m", # Wihte
+            "R#":"\033[0;31m", # Red
+            "G#":"\033[0;32m", # Green
+            "Y#":"\033[0;33m", # Yellow
+            "B#":"\033[0;34m", # Blue
+            "P#":"\033[0;35m", # Pink
+            "C#":"\033[0;36m", # Cyan
+
+            # Light
+            "WL#":"\033[1;37m", # Wihte
+            "RL#":"\033[1;31m", # Red
+            "GL#":"\033[1;32m", # Green
+            "YL#":"\033[1;33m", # Yellow
+            "BL#":"\033[1;34m", # Blue
+            "PL#":"\033[1;35m", # Pink
+            "CL#":"\033[1;36m", # Cyan
+
+            # Dark
+            "W@":"\033[7m", # bg Wihte
+            "R@":"\033[41m", # bg Red
+            "G@":"\033[42m", # bg Green
+            "Y@":"\033[43m", # bg Yellow
+            "B@":"\033[44m", # bg Blue
+            "P@":"\033[45m", # bg Pink
+            "C@":"\033[46m", # bg Cyan
+            "g@":"\033[47m", # bg Light gray
+
+            # Light
+            "RL@":"\033[101m", # bg Light Red
+            "GL@":"\033[102m", # bg Light Green
+            "YL@":"\033[103m", # bg Light Yellow
+            "BL@":"\033[104m", # bg Light Blue
+            "PL@":"\033[105m", # bg Light Pink
+            "CL@":"\033[106m", # bg Light Cyan
+            "gL@":"\033[100m", # bg Light Light gray
+    }
+    @classmethod
+    def reader(cls,text):
+        for name,color in cls.Colors.items():
+            text = text.replace(name,color)
         return text
 
     @classmethod
-    def Theme(cls,type):
-        if type == 'dark':
-            cls.clb = [BL,Bl,R,G,Y,B,P,C,W]
-        elif type == 'light':
-            cls.clb = [
-                '\033[0;30m', # black
-                '\033[1;30m', # grey
-                '\033[1;31m', # red
-                '\033[1;32m', # green
-                '\033[1;33m', # yellow
-                '\033[1;34m', # blue
-                '\033[1;35m', # purple
-                '\033[1;36m', # cyan
-                '\033[1;37m', # white
-            ]
-        else:
-            raise NameError(['dark','light'])
+    def del_colors(cls,text):
+        for name,color in cls.Colors.items():
+            text = text.replace(name,'')
+            text = text.replace(color,'')
+        return text
 
     @classmethod
-    def add(cls,*args):
-        for i in args:
-            cls.clm.append(i)
+    def add(cls,Dict):
+        for name,color in Dict.items():
+            if name in cls.Colors:
+                raise TypeError(f'{name} is already in use by Class Color...\n\
+                To fix Error change the {name} to another name')
+            for i in cls.Colors:
+                if i in name:
+                    raise TypeError(f'{i} is already in {name}...\n\
+                    \rTo fix Error change the {name} to another name')
+            cls.Colors[name] = color
+
+    @classmethod
+    def show_all_fgbg(cls):
+        temp = 0
+        text = 'type : Foreground...\n'
+        for type in [38,48]: # Foreground / Background
+            text += '\n\ntype : Background...\n' if type==48 else ''
+            for i in range(255):
+                temp += 1
+                _txt = '{}{:4d} \033[0m'.format(f'\033[{type};5;{i+1}m',i+1)
+                if temp > 8:
+                    text += _txt+'\n'
+                    temp = 0
+                else:
+                    text += _txt
+                temp += 1
+        print (text)
+
+    @classmethod
+    def fgbg_color(cls,type='FG',fgbg=7):
+        '''
+        type :
+            FG : Foreground
+            BG : Background
+        fgbg : (int)
+        '''
+        if type not in ['FG','BG']:
+            raise TypeError('please choose BG or FG')
+        return f'\033[{38 if type=="FG" else 48};5;{fgbg}m'
 
 # fix AttributeError (str) [Color funciton crash with Color Class]
 Color_ = Color
@@ -71,7 +104,7 @@ Color_ = Color
 
 class ProFunctions:
     def Measure_Sides_text(self,text):
-        text = Color().remove_c(text)
+        text = Color.del_colors(text)
         text = text.split('\n')
         top = 0
         right = 0
@@ -160,7 +193,7 @@ class ProFunctions:
         style = ''
         style += Colors+SQ[0]+SQ[7]*Width+SQ[6]
         for i in Sides:
-            L = len(Color().remove_c(i))
+            L = len(Color.del_colors(i))
             style += '\n'+Colors+SQ[1]+W+i+' '*(Width-L)+Colors+SQ[5]
         style += '\n'+Colors+SQ[2]+SQ[3]*Width+SQ[4]
         return Text(True).DS(style)
@@ -193,12 +226,12 @@ class ProFunctions:
         text = tmp
         tmp = []
         for i in text:
-            tmp += [len(Color().remove_c(i))]
+            tmp += [len(Color.del_colors(i))]
         Len = sorted(tmp)[-1]
         tmp = []
         for i in text:
-            i = f"{' '*((Len-len(Color().remove_c(i)))//2)}{i}"
-            tmp += [f'{i}{" "*(Len-len(Color().remove_c(i)))}']
+            i = f"{' '*((Len-len(Color.del_colors(i)))//2)}{i}"
+            tmp += [f'{i}{" "*(Len-len(Color.del_colors(i)))}']
         text = tmp
         return text
 
@@ -354,16 +387,6 @@ class Animation:
         elif end == False:
             print('')
 
-    # to write text by line(Index) as slow motion
-    def SlowIndex(text,t=0.01,end=False):
-        for i in range(0,len(text)):
-            time.sleep(t)
-            print(text[i],end='')
-        if end:
-            print(Color.reader(end),end='')
-        elif end == False:
-            print('')
-
     # to write text by Line as slow motion
     def SlowLine(text,t=0.5,end=False):
         for i in text.split('\n'):
@@ -371,29 +394,46 @@ class Animation:
             time.sleep(t)
 
     # python for ever...-
-    def Text(CLT=G,CUT=W,t=0.2,text='C#tB#eG#xP#t',AT='Animation',repeat=2,end=False):
+    def Text(CLT='G#',CUT='W#',t=0.2,text='C#tB#eG#xP#t',AT='Animation',Loading=False,repeat=2,end=False):
         CUT = Color.reader(CUT)
         CLT = Color.reader(CLT)
-        AT=' '+AT+' '
+        AT=AT+' '
         text = Color.reader(str(text))
-        print(W+text+CLT+AT,end='\r')
+        temp = 0
+        def Anim():
+            temp1 = text+CLT
+            temp2 = AT[:i].lower()+CUT
+            temp3 = AT[i].upper()+CLT
+            temp4 = AT[i+1:].lower()
+            text_AT = '\r'+temp1+temp2+temp3+temp4
+            if Loading:text_AT = '\r'+temp1+temp2+temp3+temp4+Loading[temp]
+            sys.stdout.write(text_AT)
+            time.sleep(t)
+        print(text+CLT+AT,end='\r')
         for i in range(repeat):
             for i in range(0,len(AT)):
-                print(W+text+CLT+AT[:i].lower()+CUT+AT[i].upper(),end='\r')
-                time.sleep(t)
+                if Loading:
+                    if temp < len(Loading)-1:
+                        temp += 1
+                        Anim()
+                    else:
+                        temp = 0
+                        Anim()
+                else:
+                    Anim()
         if end:
             print(Color.reader(end),end='')
         elif end == False:
             print('')
 
     # Loading animation...
-    def Loading(AT=['|','/','-','\\'],text='text...',t=0.1,repeat=10,end=False):
+    def Loading(AT=['|','/','-','\\'],text='W#text...',t=0.1,repeat=10,end=False):
         text = Color.reader(str(text))
         W = Color.reader('W#')
         for i in range(repeat):
             for i in range(0,len(AT)):
                 ASA = Color.reader(str(AT[i]))
-                print(W+text+ASA,end='\r')
+                sys.stdout.write('\r'+text+ASA+' ')
                 time.sleep(t)
         if end:
             print(Color.reader(end),end='')
@@ -402,12 +442,12 @@ class Animation:
 
     # Downloading animation...
     # Animation should be list
-    def DL(AT=['B#│','G#█','C#▒','B#│'],text='Loading',t=0.2,width=25,end=False):
+    def DL(AT=['B#│','G#█','C#▒','B#│'],text='W#Loading',t=0.2,width=25,end=False):
         text = Color.reader(str(text))
         AT = [Color.reader(str(i)) for i in AT]
         y = width+1
         for i in range(width+1):
-            print('\r'+W+text+AT[0]+(i*AT[1])+(AT[2]*(y-1))+AT[3]+' ',end='')
+            sys.stdout.write('\r'+text+AT[0]+(i*AT[1])+(AT[2]*(y-1))+AT[3]+' ')
             time.sleep(t)
             y -= 1
         if end:

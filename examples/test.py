@@ -1,20 +1,35 @@
 from N4Tools.Design import (
 			Animation,
 			Style,
-			Text )
+			Text,
+			Color )
 
-def my_input(text):
-	An.Text(AT='\r'+text,
+def my1_input(text):
+	Animation.Text(
+		AT=text.strip(),
 		end='\r'+text,
-		t=0.09,
+		t=0.1,
 		repeat=1,
 		text='',
-		CUT='R#',
-		CLT='B#')
+		CUT='GL#',
+		CLT='W#')
 	return input()
 
-import N4Tools.System as N4
+def my2_input(text):
+	Animation.SlowText(
+		text=text,
+		t=0.1,
+		end='',
+	)
+	return input()
 
-print ( N4.is_in_bin('python3') )
+# Normal input
+x = input('Enter text : ')
+print(x)
 
-print ( N4.is_in_home('V7x-Tool') )
+# style input
+x = my1_input('Enter text : ')
+print(x)
+
+x = my2_input('Enter text : ')
+print(x)
