@@ -2,6 +2,8 @@ import time ,sys ,os
 
 class Color:
     Colors = {
+            "BB#":"\033[1m", # Bold/Bright
+
             # Dark
             "W#":"\033[0;37m", # Wihte
             "R#":"\033[0;31m", # Red
@@ -41,7 +43,6 @@ class Color:
             "gL@":"\033[100m", # bg Light Light gray
 
             "##":"\033[0m", # Normal
-            "BB#":"\033[1m", # Bold/Bright
             "UL#":"\033[4m", # Underlined
             "B*#":"\033[5m", # Blink
     }
