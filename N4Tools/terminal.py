@@ -1,7 +1,10 @@
-import os, platform, shutil
+import shutil
 
-# terminal size
-size = {
-    'columns':shutil.get_terminal_size().columns,
-    'lines':shutil.get_terminal_size().lines
-}
+class terminal:
+    # @classmethod
+    @property
+    def size(self): # terminal size
+        return {
+            'width':shutil.get_terminal_size().columns,
+            'height':shutil.get_terminal_size().lines,
+        }

@@ -1,4 +1,4 @@
-# version ( 1.4 )
+# version ( 1.5.2 )
 
 from N4Tools.Design import Color
 

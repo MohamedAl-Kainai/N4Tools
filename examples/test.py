@@ -1,8 +1,9 @@
 from N4Tools.Design import (
-			Animation,
-			Style,
-			Text,
-			Color )
+	Animation,
+	Style,
+	Text,
+	Color,
+)
 
 def my1_input(text):
 	Animation.Text(

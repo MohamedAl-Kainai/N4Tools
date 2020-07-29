@@ -1,4 +1,4 @@
-# version ( 1.4 )
+# version ( 1.5.2 )
 
 # import the class...
 from N4Tools.Design import Animation

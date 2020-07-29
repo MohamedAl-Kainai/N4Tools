@@ -267,7 +267,7 @@ class Text(ProFunctions):
         'top':MST[0],
         'right':MST[1],
         'down':MST[2],
-        'Size':{'height':MST[3],'width':MST[4]},
+        'Size':{'width':MST[3],'height':MST[4]},
         }
 
     # Change text location ...
