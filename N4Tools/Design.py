@@ -456,6 +456,3 @@ class Animation:
             print(Color.reader(end),end='')
         elif end == False:
             print('')
-
-    def DWeb(self):
-        pass
