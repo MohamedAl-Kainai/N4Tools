@@ -1,81 +1,80 @@
 import time ,sys ,os
 
-class Color:
-    Colors = {
-            "BB#":"\033[1m", # Bold/Bright
+class Color(str):
+    colors = {
+        "BOLD":"\033[1m",
+        "UNDERLINE": "\033[4m",
+        "BLINK": "\033[5m",
+        "NORMAL": "\033[0m",
 
-            # Dark
-            "W#":"\033[0;37m", # Wihte
-            "R#":"\033[0;31m", # Red
-            "G#":"\033[0;32m", # Green
-            "Y#":"\033[0;33m", # Yellow
-            "B#":"\033[0;34m", # Blue
-            "P#":"\033[0;35m", # Pink
-            "C#":"\033[0;36m", # Cyan
-            "g#":"\033[1;30m", # Gray
+        "WIHTEBG": "\033[7m",
+        "REDBG": "\033[41m",
+        "GREENBG": "\033[42m",
+        "YELLOWBG": "\033[43m",
+        "BLUEBG": "\033[44m",
+        "PINKBG": "\033[45m",
+        "CYANBG": "\033[46m",
+        "GRAYBG": "\033[100m",
 
-            # Light
-            "WL#":"\033[1;37m", # Wihte
-            "RL#":"\033[1;31m", # Red
-            "GL#":"\033[1;32m", # Green
-            "YL#":"\033[1;33m", # Yellow
-            "BL#":"\033[1;34m", # Blue
-            "PL#":"\033[1;35m", # Pink
-            "CL#":"\033[1;36m", # Cyan
+        "LREDBG": "\033[101m",
+        "LGREENBG": "\033[102m",
+        "LYELLOWBG": "\033[103m",
+        "LBLUEBG": "\033[104m",
+        "LPINKBG": "\033[105m",
+        "LCYANBG": "\033[106m",
+        "LGRAYBG": "\033[47m",
 
-            # Dark
-            "W@":"\033[7m", # bg Wihte
-            "R@":"\033[41m", # bg Red
-            "G@":"\033[42m", # bg Green
-            "Y@":"\033[43m", # bg Yellow
-            "B@":"\033[44m", # bg Blue
-            "P@":"\033[45m", # bg Pink
-            "C@":"\033[46m", # bg Cyan
-            "g@":"\033[47m", # bg Light gray
+        "WIHTE": "\033[0;37m",
+        "RED": "\033[0;31m",
+        "GREEN": "\033[0;32m",
+        "YELLOW": "\033[0;33m",
+        "BLUE": "\033[0;34m",
+        "PINK": "\033[0;35m",
+        "CYAN": "\033[0;36m",
+        "GRAY": "\033[1;30m",
 
-            # Light
-            "RL@":"\033[101m", # bg Light Red
-            "GL@":"\033[102m", # bg Light Green
-            "YL@":"\033[103m", # bg Light Yellow
-            "BL@":"\033[104m", # bg Light Blue
-            "PL@":"\033[105m", # bg Light Pink
-            "CL@":"\033[106m", # bg Light Cyan
-            "gL@":"\033[100m", # bg Light Light gray
-
-            "##":"\033[0m", # Normal
-            "UL#":"\033[4m", # Underlined
-            "B*#":"\033[5m", # Blink
+        "LWIHTE": "\033[1;37m",
+        "LRED": "\033[1;31m",
+        "LGREEN": "\033[1;32m",
+        "LYELLOW": "\033[1;33m",
+        "LBLUE": "\033[1;34m",
+        "LPINK": "\033[1;35m",
+        "LCYAN": "\033[1;36m",
     }
-    @classmethod
-    def reader(cls,text):
-        for name,color in cls.Colors.items():
-            text = text.replace(name,color)
+    def __dir__(self):
+        return list(set(dir(__class__)+[attr for attr in self.colors.keys()]))
+
+    def __getattr__(self, item):
+        if item in self.colors:
+            COLOR = self
+            return COLOR.__class__(self.colors[item])
+        else: raise AttributeError(f"type object '{__class__.__name__}' has no attribute '{item}'")
+
+    def __add__(self, other):
+        return super().__add__(other)+self.NORMAL
+
+    def reader(self,text:str) -> str:
+        '''Read the Colors from string'''
+        if type(text) != str:
+            raise TypeError(f'reader function accept only string not ({type(text).__name__}: {text})')
+        for name,color in self.colors.items():
+            text = text.replace('[$'+name+']',color)
         return text
 
-    @classmethod
-    def del_colors(cls,text):
-        for name,color in cls.Colors.items():
-            text = text.replace(name,'')
+    def del_colors(self,text:str) -> str:
+        '''Remove colors from string'''
+        if type(text) != str:
+            raise TypeError(f'del_colors function accept only string not ({type(text).__name__}: {text})')
+        for name,color in self.colors.items():
+            text = text.replace('[$'+name+']','')
             text = text.replace(color,'')
         return text
 
-    @classmethod
-    def add(cls,Dict):
-        for name,color in Dict.items():
-            if name in cls.Colors:
-                raise TypeError(f'{name} is already in use by Class Color...\n\
-                To fix Error change the {name} to another name')
-            for i in cls.Colors:
-                if i in name:
-                    raise TypeError(f'{i} is already in {name}...\n\
-                    \rTo fix Error change the {name} to another name')
-            cls.Colors[name] = color
-
-    @classmethod
-    def show_all_fgbg(cls):
+    def show_all_rgb_colors(self):
+        '''Simple example to show all rgb colors'''
         temp = 0
         text = 'type : Foreground...\n'
-        for type in [38,48]: # Foreground / Background
+        for type in [38,48]:
             text += '\n\ntype : Background...\n' if type==48 else ''
             for i in range(255):
                 temp += 1
@@ -88,294 +87,187 @@ class Color:
                 temp += 1
         print (text)
 
-    @classmethod
-    def fgbg_color(cls,type='FG',fgbg=7):
+    def rgb(cls,rgb:int,type='FG') -> str:
         '''
         type :
             FG : Foreground
             BG : Background
-        fgbg : (int)
+        rgb : (int)
         '''
         if type not in ['FG','BG']:
             raise TypeError('please choose BG or FG')
-        return f'\033[{38 if type=="FG" else 48};5;{fgbg}m'
+        if rgb > 255 or rgb < 1:
+            raise Exception("rgb max '255' ")
+        return f'\033[{38 if type=="FG" else 48};5;{rgb}m'
 
-# fix AttributeError (str) [Color funciton crash with Color Class]
-Color_ = Color
-#-------------
-
-class ProFunctions:
-    def Measure_Sides_text(self,text):
-        text = Color.del_colors(text)
-        text = text.split('\n')
-        top = 0
-        right = 0
-        down = 0
-        width = 0
-
-        # height
-        temp2 = []
-        height = []
-        temp = False
-        for i in text:
-            if i == '' and temp is False:
-                pass
-            else:
-                temp = True
-                temp2.append(i)
-        temp = False
-        for i in temp2[::-1]:
-            if i == '' and temp is False:
-                pass
-            else:
-                temp = True
-                height.append(i)
-
-        check_up = []
-        # to git the top
-        for i in text:
-            if i == '':
-                top += 1
-            else:
-                break
-        # to git the down
-        for i in range(1,len(text)):
-            i = int('-'+str(i))
-            if text[i] == '':
-                down += 1
-            else:
-                break
-        # to git the right
-        text = text[top:len(text)]
-        text = text[0:len(text)-down]
-        for i in text:
-            if i == '':
-                check_up.append(999) # if text is None it will take 999
-            else:
-                for space in i:
-                    if space == ' ':
-                        right += 1
-                    else:
-                        break
-                check_up.append(right)
-                right = 0
-        try:
-            right = sorted(check_up)[0]
-        except IndexError:
-            raise TypeError('The text must not be empty')
-        check_up.clear()
-        # to git the width
-        for i in text:
-            for Width in i:
-                width += 1
-            check_up.append(width)
-            width = 0
-        width = sorted(check_up)[-1]-right
-        check_up.clear()
-        return [top,right,down,width,len(height)]
-
-    # text position...
-    def CTL2(self,text,top,right,down):
-        style = ''
-        text = text.split('\n')
-        # spaces top
-        style = style+('\n'*top)
-        # spaces right
-        for i in text:
-            style = style+(' '*right)+i+'\n'
-        # spaces down
-        style = style+'\n'*(down)
-        return style[0:-2]
-
-    def square(self,text,SQ,Colors):
-        Width = self.Measure_Sides_text(text)
-        Width = Width[3]+Width[1]
+class Text:
+    def get_size(self,text:str) -> dict:
+        '''Get the text size [width,height]'''
+        if type(text) != str:
+            raise TypeError(f'get_size function accept only string not ({type(text).__name__}: {text})')
+        text = Color().del_colors(text)
+        width = sorted([len(i) for i in text.split('\n')])[-1]
         height = len(text.split('\n'))
-        Sides = text.split('\n')
-        style = ''
-        style += Colors+SQ[0]+SQ[7]*Width+SQ[6]
-        for i in Sides:
-            L = len(Color.del_colors(i))
-            style += '\n'+Colors+SQ[1]+'\033[0m'+i+' '*(Width-L)+Colors+SQ[5]
-        style += '\n'+Colors+SQ[2]+SQ[3]*Width+SQ[4]
-        return Text(True).DS(style)
+        return {'width':width,'height':height}
 
-    def Mix_Squares_text(self,text,space):
-        how_many_squars = len(text)
-        style = ''
-        check_up = []
-        check_up_int = 0
-        # to delete spaces and put evre square in list alone
-        for txt in text:
-            txt = Text(True).DS(txt)
-            txt = txt.split('\n')
-            check_up.append(txt)
-        # to put squares to gather and delete spaces...
-        for i in range(0,len(check_up[0])):
-            for Square in range(0,how_many_squars):
-                try:
-                    style +=  check_up[Square][i]+' '*space
-                except IndexError:
-                    raise TypeError('The text must be Equal (\\n)')
-            style += '\n'
-        style = Text(True).DS(style)
-        return style
+    def del_padding(self,text:str) -> str:
+        '''Delete text padding'''
+        if type(text) != str:
+            raise TypeError(f'del_padding function accept only string not ({type(text).__name__}: {text})')
+        def delete_top(text:str) -> str:
+            text = text.split('\n')
+            result = []
+            top_space = True
+            for t in text:
+                if (list(Color().del_colors(t)) == [] or list(set(list(Color().del_colors(t)))) == [' ']) and top_space:
+                    pass
+                else:
+                    top_space = False
+                    result.append(t)
+            return '\n'.join(result)
 
-    def Equal(self,*text):
-        tmp = []
-        for Int,Str in enumerate(text):
-            tmp += [f'{Str}']
-        text = tmp
-        tmp = []
+        def delete_bottom(text:str) -> str:
+            text = text.split('\n')[::-1]
+            result = []
+            bottom_space = True
+            for t in text:
+                if (list(Color().del_colors(t)) == [] or list(set(list(Color().del_colors(t)))) == [' ']) and bottom_space:
+                    pass
+                else:
+                    bottom_space = False
+                    result.append(t)
+            return '\n'.join(result[::-1])
+
+        def delete_left(text:str) -> str:
+            text = text.split('\n')
+            left_space = []
+            temp = None
+            for t in text:
+                for space in list(t):
+                    if space == ' ': temp = 1 if temp == None else temp+1
+                    else: break
+                if temp != None:left_space.append(temp)
+                temp = 0
+            return '\n'.join([string[sorted(left_space)[0]:] for string in text])
+        return delete_left( delete_bottom( delete_top(text) ) )
+
+    def pos(self,text:str,x=0,y=0) -> str:
+        '''Change text postion'''
+        '''Change text postion'''
+        if type(text) != str:
+            raise TypeError(f'pos function accept only string not ({type(text).__name__}: {text})')
+        text = text.split('\n')
+        style = '\n'*y
         for i in text:
-            tmp += [len(Color.del_colors(i))]
-        Len = sorted(tmp)[-1]
-        tmp = []
-        for i in text:
-            i = f"{' '*((Len-len(Color.del_colors(i)))//2)}{i}"
-            tmp += [f'{i}{" "*(Len-len(Color.del_colors(i)))}']
-        text = tmp
-        return text
+            style = style+(' '*x)+i+'\n'
+        return style[:-1]
 
-class Text(ProFunctions):
-    def __init__(self,text):
-        self.TEXT = Color.reader(str(text))
+    def CentreAlign(self,text:str) -> str:
+        '''Put the Text in the Middle'''
+        if type(text) != str:
+            raise TypeError(f'CentreAlign function accept only string not ({type(text).__name__}: {text})')
+        text_size = self.get_size( Color().del_colors(text) )['width']
+        result = []
+        for t in text.split('\n'):
+            if len(Color().del_colors(t)) == text_size:
+                result.append(t)
+            else:
+                result.append(
+                    self.pos(
+                        t,
+                        x=(text_size//2)-(len(Color().del_colors(t))//2)
+                    )
+                )
+        return '\n'.join(result)
 
-    # figlet ...
-    def Figlet(self):
-        text = self.TEXT
-        text = os.popen('figlet "%s"'%text).read()
-        _text = ''
-        for i in text.split('\n')[0:-2]:
-            _text += i+'\n'
-        return _text[0:-1]
-
-    # toilet ...
-    def Toilet(self):
-        text = self.TEXT
-        text = os.popen('toilet -f mono12 "%s"'%text).read()
-        _text = ''
-        for i in text.split('\n')[2:-3]:
-            _text += i+'\n'
-        return _text[0:-1]
-
-    # Measure the Text and get the Spaces ...
-    def GS(self):
-        text = self.TEXT
-        MST = self.Measure_Sides_text(text)
-        return {
-        'top':MST[0],
-        'right':MST[1],
-        'down':MST[2],
-        'Size':{'width':MST[3],'height':MST[4]},
+class Square:
+    def __init__(self):
+        self.SETTINGS = {
+            'square':['╔', '║', '╚', '═', '╝', '║', '╗', '═'],
+            'space':0,
+            'padding':[0,0,0,0],
+            'color':'[$GREEN]',
+            'cols':False,
+            'equal':True,
         }
 
-    # Change text location ...
-    def CTL(self,top=0,right=0,down=0):
-        text = self.TEXT
-        style = ''
-        text = text.split('\n')
-        # spaces top
-        style = style+('\n'*top)
-        # spaces right
-        for i in text:
-            style = style+(' '*right)+i+'\n'
-        # spaces down
-        style = style+'\n'*(down)
-        return style[0:-2]
+    def style(self,text:str) -> str:
+        text = self._square_base(text)
+        return text
 
-    # delete Spaces pro(sprit)...
-    def DS(self,text):
-        sides = self.Measure_Sides_text(text)
-        text = text.split('\n')
-        style = ''
-        check_up = 0
-        # delete top spaces [\n]
-        for i in range(sides[0]):
-            text.remove(text[0])
-        for i in text:
-            if i == '':
-                style += '\n'
-                text.remove(text[0])
-            else:
-                break
-        # delete right spaces
-        for i in text:
-            check_up = sides[1]
-            for x in i:
-                if check_up>0:
-                    check_up -= 1
-                else:
-                    style += x
-            style += '\n'
-        check_up = 0
-        # delete down spaces
-        text = style[0:len(style)-sides[2]-1]
-        # delete left space
-        text_x = ''
-        text_y = ''
-        style = ''
-        for i in text.split('\n'):
-            text_x += i[::-1]+'\n'
-        text_x = text_x[0:-1]
-        sides = self.Measure_Sides_text(text_x)
-        check_up = 0
-        for i in text_x.split('\n'):
-            check_up = sides[1]
-            for x in i:
-                if check_up>0:
-                    check_up -= 1
-                else:
-                    style += x
-            style += '\n'
-        for i in style[0:-1].split('\n'):
-            text_y += i[::-1]+'\n'
-        return text_y[0:-1]
+    def set_settings(self,settings:dict) -> dict:
+        for key,item in settings.items():
+            if key == 'square':
+                if type(item) == list and len(item) == 8:
+                    self.SETTINGS[key] = item
+                else: raise TypeError('square accept only list and len list should be 8')
 
-class Style(ProFunctions):
-    def __init__(self,*args):
-        self.args = [Color.reader(str(i)) for i in args]
+            elif key == 'space':
+                if type(item) == int:
+                    self.SETTINGS[key] = item
+                else: raise TypeError('space accept only (int)')
 
-    # text in Square ...
-    def Square(self,Square=['╔','║','╚','═','╝','║','╗','═'],space=0,padding_x=0,padding_y=0,Color='R#',cols=False,Equal=True):
-        Square = [Color_.reader(i) for i in Square]
-        Color = Color_.reader(Color)
-        text = self.args
-        if Equal:
-            text = self.Equal(*self.args)
-        Style = []
-        xs = []
-        STYLE = ''
-        if not cols:
-            cols = len(text)
-        for i in text:
-            _i = ''
-            for x in i.split('\n'):
-                _i += (' '*padding_x)+x+(' '*padding_x)+'\n'
-            _i = _i[0:-1]
-            Style.append(self.square(str( ('\n'*padding_y)+_i+('\n'*padding_y)),Square,Color))
-        cols = cols
-        temp = 0
-        for i in range(0,len(Style),cols):
-            temp += cols
-            xs.append(Style[i:temp])
-        for i in xs:
-            STYLE += self.Mix_Squares_text(i,space)+'\n'
-        return STYLE[0:-1]
+            elif key == 'padding':
+                if type(item) == list and len(item) == 4:
+                    self.SETTINGS[key] = item
+                else: raise TypeError('padding accept only (list) and 4 items')
 
-    # Texts in the Middle ...
-    def Center(self):
-        args = self.args
-        style = ''
-        temp = [self.Measure_Sides_text(i)[3] for i in args]
-        temp2 = sorted(temp)[-1]
-        bigest = self.Measure_Sides_text(args[temp.index(temp2)])
-        for i in args:
-            i += ' '
-            width = self.Measure_Sides_text(i)[3]
-            right = self.Measure_Sides_text(i)[1]
-            style += self.CTL2(i,0,(((temp2+1)//2)-(width//2)),0)+'\n'
-        return style[0:-1]
+            elif key == 'color':
+                if type(item) == str:
+                    if item.replace('[$','').replace(']','') in Color().colors.keys() or item in [_color[1] for _color in Color().colors.items()]:
+                        self.SETTINGS[key] = item
+                    else: raise TypeError(f'color accept only {["[$"+c+"]" for c in Color().colors.keys()]}')
+                else: raise TypeError('color accept only (str)')
+
+            elif key == 'cols':
+                if type(item) == bool:
+                    self.SETTINGS[key] = item
+                else: raise TypeError('cols accept only (bool)')
+
+            elif key == 'equal':
+                if type(item) == bool:
+                    self.SETTINGS[key] = item
+                else: raise TypeError('equal accept only (bool)')
+
+            else: raise TypeError(f"'{key}' is not in settings, use only {[key for key in self.SETTINGS.keys()]}")
+
+        return self.SETTINGS
+
+    def _square_base(self,text):
+        PADDING = self.SETTINGS['padding']
+        text = Text().pos(text,x=PADDING[0])
+        text = ('\n'*PADDING[1]) + text + ('\n'*PADDING[3])
+        text_size = Text().get_size(Color().del_colors(text))
+        text_size = {'width':text_size['width']+PADDING[2]}
+        SQUARE = self.SETTINGS['square']
+        COLOR = self.SETTINGS['color']
+
+        output = (COLOR if COLOR else '[$NORMAL]')+SQUARE[0]+(SQUARE[7]*text_size['width'])+SQUARE[6]+'[$NORMAL]' # .......... ╔═════╗
+        for t in text.split('\n'):
+            t_size = Text().get_size(Color().del_colors(t))
+            output += '\n'+(COLOR if COLOR else '[$NORMAL]')+(SQUARE[1]+'[$NORMAL]'+t) # ..................................... ║
+            output += (
+                (
+                    (COLOR if COLOR else '[$NORMAL]')+SQUARE[5] # .................................................................. ║
+                ) if t_size['width'] == text_size['width'] else (
+                    ' '*(text_size['width']-t_size['width'])+
+                    (COLOR if COLOR else '[$NORMAL]')+SQUARE[5]+'[$NORMAL]' # space space space space space space space space space  ║
+                )
+            )
+        output += '\n'+(COLOR if COLOR else '[$NORMAL]')+SQUARE[2]+(SQUARE[3]*text_size['width'])+SQUARE[4]+'[$NORMAL]' # .... ╚═════╝
+        return Color().reader(output)
+
+if __name__ == '__main__':
+    def text_in_square(text):
+        SQ = Square()
+        SQ.set_settings({
+            'padding':[1,0,1,0],
+            'color':'\033[0;36m',
+        })
+        return SQ.style(text)
+
+    text = 'Mohamed'
+    print (text_in_square(text))
 
 class Animation:
     # to write text by Index(System) slow motion
