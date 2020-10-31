@@ -148,7 +148,8 @@ class Text:
                     else: break
                 if temp != None:left_space.append(temp)
                 temp = 0
-            return '\n'.join([string[sorted(left_space)[0]:] for string in text])
+            try: return '\n'.join([string[sorted(left_space)[0]:] for string in text])
+            except IndexError: return '\n'.join(text)
         return delete_left( delete_bottom( delete_top(text) ) )
 
     def pos(self,text:str,x=0,y=0) -> str:
@@ -160,13 +161,13 @@ class Text:
         style = '\n'*y
         for i in text:
             style = style+(' '*x)+i+'\n'
-        return style[:-1]
+        return Color().reader(style[:-1])
 
     def CentreAlign(self,text:str) -> str:
         '''Put the Text in the Middle'''
         if type(text) != str:
             raise TypeError(f'CentreAlign function accept only string not ({type(text).__name__}: {text})')
-        text_size = self.get_size( Color().del_colors(text) )['width']
+        text_size = self.get_size(text)['width']
         result = []
         for t in text.split('\n'):
             if len(Color().del_colors(t)) == text_size:
@@ -178,22 +179,125 @@ class Text:
                         x=(text_size//2)-(len(Color().del_colors(t))//2)
                     )
                 )
-        return '\n'.join(result)
+        return Color().reader('\n'.join(result))
+
+    def CentreAlignPro(self, ListTexts: list) -> str:
+        '''Put the big Texts in the Middle'''
+        if type(ListTexts) != list:
+            raise TypeError(f'CentreAlign function accept only list not ({type(ListTexts).__name__}: {ListTexts})')
+        width = 0
+        for text in ListTexts:
+            text = Color().del_colors(text)
+            temp_width = self.get_size(text)
+            width = temp_width['width'] if width < temp_width['width'] else width
+
+        result = []
+        for t in ListTexts:
+            if self.get_size(t)['width'] == width:
+                result.append(t)
+            else:
+                result.append(
+                    self.pos(
+                        t,
+                        x=(width // 2) - (self.get_size(t)['width'] // 2)
+                    )
+                )
+        return Color().reader('\n'.join(result))
+
+    def Figlet(self,text:str,font='epic') -> str:
+        try:
+            import pyfiglet
+        except ModuleNotFoundError or ImportError:
+            sys.exit(ModuleNotFoundError('ModuleNotFoundError: No module named figlet\n\t"pip3 install pyfiglet"'))
+        if font not in pyfiglet.FigletFont.getFonts():
+            raise TypeError(f'Figlet not support this font! ({font})')
+        FIG = pyfiglet.Figlet(font=font)
+        output = FIG.renderText(text)
+        output = self.del_padding(str(output))
+        return output
+
+    def FigletFonts(self) -> list:
+        try:
+            import pyfiglet
+        except ModuleNotFoundError or ImportError:
+            sys.exit(ModuleNotFoundError('ModuleNotFoundError: No module named figlet\n\t"pip3 install pyfiglet"'))
+        return pyfiglet.FigletFont.getFonts()
+
+    def mix(self,List:list,spacing=0) -> str:
+        '''Mix texts together'''
+        height ,output = [] ,''
+        for text in List:height += [self.get_size(text)['height']]
+        temp = [
+            self.full(self.pos(t,x=spacing).split('\n'))+
+            ([' '*(self.get_size(t)['width']+spacing)]*
+             (sorted(height)[-1]-sorted(height)[0]))
+            for t in List
+        ]
+        for text in zip(*temp):
+            output += ''.join(text)+'\n'
+        return Color().reader(self.del_padding(output))
+
+    def full(self,text):
+        tmp = []
+        for i in text:
+            tmp += [self.get_size(i)['width']]
+        Len = sorted(tmp)[-1]
+        tmp = []
+        for i in text:
+            tmp += [f'{i}{" " * (Len - self.get_size(i)["width"])}']
+        return tmp
+
+    def equal(self, text):
+        tmp = []
+        for i in text:
+            tmp += [self.get_size(i)['width']]
+        Len = sorted(tmp)[-1]
+        tmp = []
+        for i in text:
+            i = f"{' ' * ((Len - self.get_size(i)['width']) // 2)}{i}"
+            tmp += [f'{i}{" " * (Len - self.get_size(i)["width"])}']
+        return tmp
 
 class Square:
     def __init__(self):
         self.SETTINGS = {
             'square':['╔', '║', '╚', '═', '╝', '║', '╗', '═'],
-            'space':0,
+            'spacing':0,
             'padding':[0,0,0,0],
-            'color':'[$GREEN]',
-            'cols':False,
+            'color':'',
+            'cols':0,
             'equal':True,
         }
 
-    def style(self,text:str) -> str:
-        text = self._square_base(text)
-        return text
+    def __setattr__(self, key, value):
+        super(Square, self).__setattr__(key,value)
+        if key in self.SETTINGS:
+            self.set_settings({key:value})
+
+    def style(self,List:list) -> str:
+        if self.SETTINGS['equal']:
+            List = Text().equal(List)
+
+        if self.SETTINGS['cols'] == 0:
+            output = Text().mix([self.base(sq) for sq in List],spacing=self.SETTINGS['spacing'])
+
+        else:
+            output = ''
+            cols = self.SETTINGS['cols']
+            temp1 = 0
+            temp2 = cols
+            while True:
+                try:
+                    output += Text().mix([self.base(sq) for sq in List[temp1:temp2]],spacing=self.SETTINGS['spacing'])+'\n'
+                    temp1 = temp2
+                    temp2 += cols
+                    if len(List) <= temp1:
+                        output = output[:-1]
+                        break
+                except IndexError:
+                    output = output[:-1]
+                    break
+        return output
 
     def set_settings(self,settings:dict) -> dict:
         for key,item in settings.items():
@@ -202,10 +306,10 @@ class Square:
                     self.SETTINGS[key] = item
                 else: raise TypeError('square accept only list and len list should be 8')
 
-            elif key == 'space':
+            elif key == 'spacing':
                 if type(item) == int:
                     self.SETTINGS[key] = item
-                else: raise TypeError('space accept only (int)')
+                else: raise TypeError('spacing accept only (int)')
 
             elif key == 'padding':
                 if type(item) == list and len(item) == 4:
@@ -213,16 +317,16 @@ class Square:
                 else: raise TypeError('padding accept only (list) and 4 items')
 
             elif key == 'color':
-                if type(item) == str:
+                if type(item) == str or type(item) == Color:
                     if item.replace('[$','').replace(']','') in Color().colors.keys() or item in [_color[1] for _color in Color().colors.items()]:
-                        self.SETTINGS[key] = item
+                        self.SETTINGS[key] = str(item)
                     else: raise TypeError(f'color accept only {["[$"+c+"]" for c in Color().colors.keys()]}')
                 else: raise TypeError('color accept only (str)')
 
             elif key == 'cols':
-                if type(item) == bool:
+                if type(item) == int:
                     self.SETTINGS[key] = item
-                else: raise TypeError('cols accept only (bool)')
+                else: raise TypeError('cols accept only (int)')
 
             elif key == 'equal':
                 if type(item) == bool:
@@ -233,41 +337,32 @@ class Square:
 
         return self.SETTINGS
 
-    def _square_base(self,text):
+    def base(self,text):
         PADDING = self.SETTINGS['padding']
+
+        '''set padding and text size'''
         text = Text().pos(text,x=PADDING[0])
         text = ('\n'*PADDING[1]) + text + ('\n'*PADDING[3])
-        text_size = Text().get_size(Color().del_colors(text))
+        text_size = Text().get_size(text)
         text_size = {'width':text_size['width']+PADDING[2]}
+
         SQUARE = self.SETTINGS['square']
         COLOR = self.SETTINGS['color']
 
         output = (COLOR if COLOR else '[$NORMAL]')+SQUARE[0]+(SQUARE[7]*text_size['width'])+SQUARE[6]+'[$NORMAL]' # .......... ╔═════╗
         for t in text.split('\n'):
-            t_size = Text().get_size(Color().del_colors(t))
+            t_size = Text().get_size(t)
             output += '\n'+(COLOR if COLOR else '[$NORMAL]')+(SQUARE[1]+'[$NORMAL]'+t) # ..................................... ║
             output += (
                 (
-                    (COLOR if COLOR else '[$NORMAL]')+SQUARE[5] # .................................................................. ║
+                    (COLOR if COLOR else '[$NORMAL]')+SQUARE[5]+'[$NORMAL]'# ....................................................... ║
                 ) if t_size['width'] == text_size['width'] else (
-                    ' '*(text_size['width']-t_size['width'])+
+                    ' '*(text_size['width']-t_size['width'])+ # spaces
                     (COLOR if COLOR else '[$NORMAL]')+SQUARE[5]+'[$NORMAL]' # space space space space space space space space space  ║
                 )
             )
         output += '\n'+(COLOR if COLOR else '[$NORMAL]')+SQUARE[2]+(SQUARE[3]*text_size['width'])+SQUARE[4]+'[$NORMAL]' # .... ╚═════╝
         return Color().reader(output)
-
-if __name__ == '__main__':
-    def text_in_square(text):
-        SQ = Square()
-        SQ.set_settings({
-            'padding':[1,0,1,0],
-            'color':'\033[0;36m',
-        })
-        return SQ.style(text)
-
-    text = 'Mohamed'
-    print (text_in_square(text))
 
 class Animation:
     # to write text by Index(System) slow motion
@@ -287,7 +382,7 @@ class Animation:
             print(i,end='\n' if end == False else end if text.split('\n')[-1] == i else '\n')
             time.sleep(t)
 
-    # python for ever...-
+    # python for ever...
     def Text(CLT='G#',CUT='W#',t=0.2,text='C#tB#eG#xP#t',AT='Animation',Loading=False,repeat=2,end=False):
         CUT = Color.reader(CUT)
         CLT = Color.reader(CLT)
