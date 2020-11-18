@@ -1,4 +1,6 @@
-import time ,sys ,os
+import time ,sys ,threading
+
+__all__ = ['Color','Text','Square','Animation','ThreadAnimation']
 
 class Color(str):
     colors = {
@@ -46,8 +48,7 @@ class Color(str):
 
     def __getattr__(self, item):
         if item in self.colors:
-            COLOR = self
-            return COLOR.__class__(self.colors[item])
+            return self.__class__(self.colors[item])
         else: raise AttributeError(f"type object '{__class__.__name__}' has no attribute '{item}'")
 
     def __add__(self, other):
@@ -59,6 +60,7 @@ class Color(str):
             raise TypeError(f'reader function accept only string not ({type(text).__name__}: {text})')
         for name,color in self.colors.items():
             text = text.replace('[$'+name+']',color)
+        text = text.replace('[$/]',self.colors['NORMAL'])
         return text
 
     def del_colors(self,text:str) -> str:
@@ -87,7 +89,7 @@ class Color(str):
                 temp += 1
         print (text)
 
-    def rgb(cls,rgb:int,type='FG') -> str:
+    def rgb(self,rgb:int,type='FG') -> str:
         '''
         type :
             FG : Foreground
@@ -98,7 +100,7 @@ class Color(str):
             raise TypeError('please choose BG or FG')
         if rgb > 255 or rgb < 1:
             raise Exception("rgb max '255' ")
-        return f'\033[{38 if type=="FG" else 48};5;{rgb}m'
+        return self.__class__(f'\033[{38 if type=="FG" else 48};5;{rgb}m')
 
 class Text:
     def get_size(self,text:str) -> dict:
@@ -153,7 +155,6 @@ class Text:
         return delete_left( delete_bottom( delete_top(text) ) )
 
     def pos(self,text:str,x=0,y=0) -> str:
-        '''Change text postion'''
         '''Change text postion'''
         if type(text) != str:
             raise TypeError(f'pos function accept only string not ({type(text).__name__}: {text})')
@@ -258,6 +259,16 @@ class Text:
             tmp += [f'{i}{" " * (Len - self.get_size(i)["width"])}']
         return tmp
 
+    def arabic(self,text):
+        try:
+            import arabic_reshaper
+            from bidi.algorithm import get_display
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''To fix this error install this libs\n"pip install arabic_reshaper"\n"pip install python-bidi"''')
+
+        reshaped_text = arabic_reshaper.reshape(text)
+        return get_display(reshaped_text)
+
 class Square:
     def __init__(self):
         self.SETTINGS = {
@@ -267,6 +278,7 @@ class Square:
             'color':'',
             'cols':0,
             'equal':True,
+            'center':False,
         }
 
     def __setattr__(self, key, value):
@@ -274,9 +286,18 @@ class Square:
         if key in self.SETTINGS:
             self.set_settings({key:value})
 
+    def __dir__(self):
+        return list(set(dir(__class__)+[attr for attr in self.SETTINGS.keys()]))
+
     def style(self,List:list) -> str:
+        if type(List) != list:
+            raise TypeError(f'style function accept only list not {List.__class__.__name__}')
+
         if self.SETTINGS['equal']:
-            List = Text().equal(List)
+            if self.SETTINGS['center']:
+                List = Text().equal(List)
+            else:
+                List = Text().full(List)
 
         if self.SETTINGS['cols'] == 0:
             output = Text().mix([self.base(sq) for sq in List],spacing=self.SETTINGS['spacing'])
@@ -333,6 +354,11 @@ class Square:
                     self.SETTINGS[key] = item
                 else: raise TypeError('equal accept only (bool)')
 
+            elif key == 'center':
+                if type(item) == bool:
+                    self.SETTINGS[key] = item
+                else: raise TypeError('center accept only (bool)')
+
             else: raise TypeError(f"'{key}' is not in settings, use only {[key for key in self.SETTINGS.keys()]}")
 
         return self.SETTINGS
@@ -349,97 +375,119 @@ class Square:
         SQUARE = self.SETTINGS['square']
         COLOR = self.SETTINGS['color']
 
-        output = (COLOR if COLOR else '[$NORMAL]')+SQUARE[0]+(SQUARE[7]*text_size['width'])+SQUARE[6]+'[$NORMAL]' # .......... ╔═════╗
+        CO = (COLOR if COLOR else '[$NORMAL]')
+        output = CO+SQUARE[0]+CO+(SQUARE[7]*text_size['width'])+CO+SQUARE[6]+'[$NORMAL]' # .......... ╔═════╗
         for t in text.split('\n'):
             t_size = Text().get_size(t)
-            output += '\n'+(COLOR if COLOR else '[$NORMAL]')+(SQUARE[1]+'[$NORMAL]'+t) # ..................................... ║
-            output += (
-                (
-                    (COLOR if COLOR else '[$NORMAL]')+SQUARE[5]+'[$NORMAL]'# ....................................................... ║
-                ) if t_size['width'] == text_size['width'] else (
-                    ' '*(text_size['width']-t_size['width'])+ # spaces
-                    (COLOR if COLOR else '[$NORMAL]')+SQUARE[5]+'[$NORMAL]' # space space space space space space space space space  ║
-                )
-            )
-        output += '\n'+(COLOR if COLOR else '[$NORMAL]')+SQUARE[2]+(SQUARE[3]*text_size['width'])+SQUARE[4]+'[$NORMAL]' # .... ╚═════╝
+            output += '\n'+CO+(SQUARE[1]+'[$NORMAL]'+t) # ........................................... ║
+            output += ' '*(text_size['width']-t_size['width'])+CO+SQUARE[5]+'[$NORMAL]' # ................. ║
+
+        output += '\n'+CO+SQUARE[2]+CO+(SQUARE[3]*text_size['width'])+CO+SQUARE[4]+'[$NORMAL]' # .... ╚═════╝
         return Color().reader(output)
 
 class Animation:
-    # to write text by Index(System) slow motion
-    def SlowText(text,t=0.1,end=False):
+    def Loading(self,text='Loading...',anim=['/','-','\\','|']):
+        while True:
+            for i in anim:
+                yield text+i
+
+    def SlowText(self,text,timer=0.1):
+        '''to write text by Index(System) slow motion'''
         for i in text:
             sys.stdout.write(i)
             sys.stdout.flush()
-            time.sleep(t)
-        if end:
-            print(Color.reader(end),end='')
-        elif end == False:
-            print('')
+            time.sleep(timer)
 
-    # to write text by Line as slow motion
-    def SlowLine(text,t=0.5,end=False):
+    def SlowLine(self,text,timer=0.5):
+        '''to write text by Line as slow motion'''
         for i in text.split('\n'):
-            print(i,end='\n' if end == False else end if text.split('\n')[-1] == i else '\n')
-            time.sleep(t)
+            print(i)
+            time.sleep(timer)
 
-    # python for ever...
-    def Text(CLT='G#',CUT='W#',t=0.2,text='C#tB#eG#xP#t',AT='Animation',Loading=False,repeat=2,end=False):
-        CUT = Color.reader(CUT)
-        CLT = Color.reader(CLT)
-        AT=AT+' '
-        text = Color.reader(str(text))
-        temp = 0
-        def Anim():
-            temp1 = text+CLT
-            temp2 = AT[:i].lower()+CUT
-            temp3 = AT[i].upper()+CLT
-            temp4 = AT[i+1:].lower()
-            text_AT = '\r'+temp1+temp2+temp3+temp4
-            if Loading:text_AT = '\r'+temp1+temp2+temp3+temp4+Loading[temp]
-            sys.stdout.write(text_AT)
-            time.sleep(t)
-        print(text+CLT+AT,end='\r')
-        for i in range(repeat):
-            for i in range(0,len(AT)):
-                if Loading:
-                    if temp < len(Loading)-1:
-                        temp += 1
-                        Anim()
-                    else:
-                        temp = 0
-                        Anim()
-                else:
-                    Anim()
-        if end:
-            print(Color.reader(end),end='')
-        elif end == False:
-            print('')
+class ThreadAnimation:
+    def __init__(self):
+        self.kill = False
+        self.timer = .2
+        self.END = 'DONE...!'
+        self.ANIMATION = None
 
-    # Loading animation...
-    def Loading(AT=['|','/','-','\\'],text='W#text...',t=0.1,repeat=10,end=False):
-        text = Color.reader(str(text))
-        W = Color.reader('W#')
-        for i in range(repeat):
-            for i in range(0,len(AT)):
-                ASA = Color.reader(str(AT[i]))
-                sys.stdout.write('\r'+text+ASA+' ')
-                time.sleep(t)
-        if end:
-            print(Color.reader(end),end='')
-        elif end == False:
-            print('')
+    def set_animation(self,ANIMATION,END=None):
+        '''
+        to set Animation.
+        example:
+        ... def MyAnimation():
+        ...     while True:
+        ...         for i in 'Loading':
+        ...             yield f'Loading...( {i} )'
+        ...
+        ... TA = ThreadAnimation()
+        ... TA.set_animation( MyAnimation(), END='DONE...!' )
+        ...
+        ... with TA:
+        ...     for i in range(10000000):
+        ...         pass
+        ... print (i)
+        '''
+        self.ANIMATION = ANIMATION
+        self.END = END if END != None else self.END
 
-    # Downloading animation...
-    # Animation should be list
-    def DL(AT=['B#│','G#█','C#▒','B#│'],text='W#Loading',t=0.2,width=25,end=False):
-        text = Color.reader(str(text))
-        AT = [Color.reader(str(i)) for i in AT]
-        y = width+1
-        for i in range(width+1):
-            sys.stdout.write('\r'+text+AT[0]+(i*AT[1])+(AT[2]*(y-1))+AT[3]+' ')
-            time.sleep(t)
-            y -= 1
-        if end:
-            print(Color.reader(end),end='')
-        elif end == False:
-            print('')
+    def thread(self,func):
+        '''
+        function thread.
+        example:
+        ... TA = ThreadAnimation()
+        ... TA.set_animation( MyAnimation() )
+        ...
+        ... @TA.thread
+        ... def my_function():
+        ...     for i in range(10000000):
+        ...         pass
+        ...     return i
+        ...
+        ... print( my_function() )
+
+        '''
+        def wrapper(*args,**kwargs):
+            self.__enter__()
+            rv = func(*args,**kwargs)
+            self.kill = True
+            self.THREAD_ANIM.join()
+            return rv
+        return wrapper
+
+    def __enter__(self):
+        '''
+        example:
+        ... TA = ThreadAnimation()
+        ... TA.set_animation( MyAnimation(), END='DONE...!' )
+        ...
+        ... with TA as thread:
+        ...     for i in range(10000000):
+        ...         pass
+        ...     print(thread.is_alive())
+        ...
+        ... print (thread.is_alive())
+        ... print (i)
+        '''
+        self.kill = False
+        def anim():
+            size = 0
+            for text in self.ANIMATION:
+                text = Color().reader(text+'[$NORMAL]')
+                if self.kill:
+                    print('\r'+self.END+' '*(size-len(self.END) if len(self.END) < size else 0))
+                    break
+
+                sys.stdout.write('\r'+text)
+                size = len(Color().del_colors(text))
+                time.sleep(self.timer)
+
+        self.THREAD_ANIM = threading.Thread(target=anim)
+        self.THREAD_ANIM.daemon = True
+        self.THREAD_ANIM.start()
+
+        return self.THREAD_ANIM
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.kill = True
+        self.THREAD_ANIM.join()

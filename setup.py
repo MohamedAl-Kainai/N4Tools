@@ -7,12 +7,12 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="N4Tools",
     version=__version__,
-    author="Example Author",
-    author_email="mohammedkainaiahmaed@gmail.com",
+    author="mohamedalkainai@gmail.com",
+    author_email="mohamedalkainai@gmail.com",
     description="Style for ( Termux & Kali ) tools...",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/No-Name-404/N404-Tool",
+    url="https://github.com/No-Name-404/N4Tools",
     packages=['N4Tools'],
     classifiers=[
         "Programming Language :: Python :: 3",

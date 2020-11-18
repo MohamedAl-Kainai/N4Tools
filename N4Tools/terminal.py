@@ -1,7 +1,6 @@
 import shutil
 
 class terminal:
-    # @classmethod
     @property
     def size(self): # terminal size
         return {

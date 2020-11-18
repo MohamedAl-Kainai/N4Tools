@@ -1,8 +1,21 @@
-# N4Tools
-##### What is N4Tools?
-It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs on the terminal.
-#### example:
-```python
+'''
+example ( version 1.7.0 )
+Simple design...
+test:
+    Text:
+        CenterAlignPro
+        mix
+        Figlet
+        equal
+
+    Square:
+        color
+        padding
+        style
+
+    Color:
+        RED
+'''
 from N4Tools.Design import Text, Square, Color
 
 class MyToolDesign:
@@ -59,6 +72,3 @@ class MyToolDesign:
 
 if __name__ == '__main__':
     MyToolDesign().print_style()
-```
-output:
-![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99526680-e3982200-299b-11eb-871d-41c799e63454.png)
