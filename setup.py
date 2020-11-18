@@ -20,4 +20,9 @@ setuptools.setup(
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
     ],
+    install_requires=[
+        'pyfiglet',
+        'arabic_reshaper',
+        'python-bidi',
+    ],
 )
