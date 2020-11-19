@@ -61,4 +61,4 @@ if __name__ == '__main__':
     MyToolDesign().print_style()
 ```
 output:
-![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99526680-e3982200-299b-11eb-871d-41c799e63454.png)
+![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99627674-0de9ee00-2a35-11eb-8baf-16499800f9de.jpg)
