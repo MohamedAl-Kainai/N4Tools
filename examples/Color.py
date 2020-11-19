@@ -40,3 +40,13 @@ print(text)
 text = CO.rgb(203,type='BG')+'MyText'
 print(text)
 print('-'*40)
+
+print('-'*40)
+# my rgb color
+MyColor = CO.rgb(203,type='FG')
+# add to Color class
+CO.colors['ColorName'] = MyColor
+# test:
+print (CO.ColorName+'My text')
+print (CO.reader('[$ColorName]My text[$/]'))
+print('-'*40)
