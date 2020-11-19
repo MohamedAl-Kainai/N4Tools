@@ -90,10 +90,5 @@ CO.colors['ColorName'] = MyColor
 print (CO.ColorName+'My text')
 print (CO.reader('[$ColorName]My text[$/]'))
 ```
-<<<<<<< Updated upstream
-output:
-![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99627674-0de9ee00-2a35-11eb-8baf-16499800f9de.jpg)
-=======
 
 <!-- ![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99627674-0de9ee00-2a35-11eb-8baf-16499800f9de.jpg) -->
->>>>>>> Stashed changes
