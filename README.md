@@ -14,11 +14,11 @@
 It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs on the terminal.
 
 #### N4Tools API
- - [Color](https://github.com/No-Name-404/N4Tools#Color)
- - [Text](https://github.com/No-Name-404/N4Tools#Text)
- - [Square](https://github.com/No-Name-404/N4Tools#Square)
- - [Animation](https://github.com/No-Name-404/N4Tools#Animation)
- - [ThreadAnimation](https://github.com/No-Name-404/N4Tools#ThreadAnimation)
+ - [Color](#Color)
+ - [Text](#Text)
+ - [Square](#Square)
+ - [Animation](#Animation)
+ - [ThreadAnimation](#ThreadAnimation)
 
 ### Color
 It is a class that allows you to colorize text professionally on the terminal.

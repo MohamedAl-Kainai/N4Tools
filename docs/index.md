@@ -8,21 +8,25 @@
     <a href="https://pepy.tech/project/n4tools"><img alt="Build Status" src="https://pepy.tech/badge/n4tools"></a>
 </p>
 
-#### What is N4Tools?
+### What is N4Tools?
 It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs on the terminal.
 
-#### N4Tools API
+### N4Tools API
  - [Color](#Color)
-   - colors
-   - colors
-   - colors
  - [Text](#Text)
- - [Square](https://github.com/No-Name-404/N4Tools#Square)
- - [Animation](https://github.com/No-Name-404/N4Tools#Animation)
- - [ThreadAnimation](https://github.com/No-Name-404/N4Tools#ThreadAnimation)
+ - [Square](#Square)
+ - [Animation](#Animation)
+ - [ThreadAnimation](#ThreadAnimation)
 
-### Color <div id="Color"></div>
+## Color
+ - [reader](#reader)
+ - [del_colors](#del_colors)
+ - [show_all_rgb_colors](#show_all_rgb_colors)
+ - [rgb](#rgb)
+
 It is a class that allows you to colorize text professionally on the terminal.
+
+<div id="reader"> </div>
 Texts can be colored in two ways.
 first way by just adding the color to the text and second ways by using reader function.
 
@@ -47,7 +51,10 @@ pprint (CO.colors)
 for color in CO.colors.keys():
     print (CO.reader(f'[${color}]{color}'))
 ```
+
+<div id="del_colors"> </div>
 Delete colors from text.
+
 ```python
 from N4Tools.Design import Color
 CO = Color()
@@ -59,14 +66,19 @@ print(text)
 text = CO.del_colors(text)
 print(text)
 ```
+<div id="show_all_rgb_colors"> </div>
 All colors rgb that N4Tools support.
+
 ```python
 from N4Tools.Design import Color
 CO = Color()
 
 CO.show_all_rgb_colors()
 ```
+
+<div id="rgb"> </div>
 Create my rgb color.
+
 ```python
 from N4Tools.Design import Color
 CO = Color()
