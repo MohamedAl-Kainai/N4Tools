@@ -1,4 +1,9 @@
-### Color
+<style>
+   .highlight{
+        background_color
+   }
+</style>
+# Color
 It is a class that allows you to colorize text professionally on the terminal.
 Texts can be colored in two ways.
 first way by just adding the color to the text and second ways by using reader function.
