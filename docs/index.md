@@ -1,10 +1,10 @@
 <p align="center">
-    <img src="https://img.shields.io/cocoapods/l/Cocoapods">
-    <img src="https://img.shields.io/badge/python-3.7|3.8-red.svg">
-    <img src="https://img.shields.io/pypi/v/N4Tools?label=N4Tools">
-    <img src="https://img.shields.io/pypi/v/python-bidi?color=darkgreen&label=python-bidi">
-    <img src="https://img.shields.io/pypi/v/pyfiglet?color=darkgreen&label=pyfiglet">
-    <img src="https://img.shields.io/pypi/v/arabic_reshaper?color=darkgreen&label=arabic_reshaper">
+    <a href=""><img src="https://img.shields.io/cocoapods/l/Cocoapods"></a>
+    <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.7|3.8-red.svg"></a>
+    <a href=""><img src="https://img.shields.io/pypi/v/N4Tools?label=N4Tools"></a>
+    <a href="https://pypi.org/project/python-bidi"><img src="https://img.shields.io/pypi/v/python-bidi?color=darkgreen&label=python-bidi"></a>
+    <a href="https://pypi.org/project/pyfiglet"><img src="https://img.shields.io/pypi/v/pyfiglet?color=darkgreen&label=pyfiglet"></a>
+    <a href="https://pypi.org/project/arabic_reshaper"><img src="https://img.shields.io/pypi/v/arabic_reshaper?color=darkgreen&label=arabic_reshaper"></a> 
     <a href="https://pepy.tech/project/n4tools"><img alt="Build Status" src="https://pepy.tech/badge/n4tools"></a>
 </p>
 
