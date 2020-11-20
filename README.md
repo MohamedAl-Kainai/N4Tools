@@ -10,17 +10,17 @@
     <a href="https://pepy.tech/project/n4tools"><img alt="Build Status" src="https://pepy.tech/badge/n4tools"></a>
 </p>
 
-##### What is N4Tools?
+#### What is N4Tools?
 It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs on the terminal.
 
-##### N4Tools API
+#### N4Tools API
  - [Color](https://github.com/No-Name-404/N4Tools#Color)
  - [Text](https://github.com/No-Name-404/N4Tools#Text)
  - [Square](https://github.com/No-Name-404/N4Tools#Square)
  - [Animation](https://github.com/No-Name-404/N4Tools#Animation)
  - [ThreadAnimation](https://github.com/No-Name-404/N4Tools#ThreadAnimation)
 
-#### Color
+### Color
 It is a class that allows you to colorize text professionally on the terminal.
 Texts can be colored in two ways.
 first way by just adding the color to the text and second ways by using reader function.
@@ -91,5 +91,11 @@ CO.colors['ColorName'] = MyColor
 print (CO.ColorName+'My text')
 print (CO.reader('[$ColorName]My text[$/]'))
 ```
+
+### Text
+### Square
+### Animation
+### ThreadAnimation
+
 
 <!-- ![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99627674-0de9ee00-2a35-11eb-8baf-16499800f9de.jpg) -->
