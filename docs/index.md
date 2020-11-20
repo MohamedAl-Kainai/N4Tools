@@ -18,7 +18,7 @@ It is a library that contains a set of ready-made codes that enable you to creat
  - [Animation](#Animation)
  - [ThreadAnimation](#ThreadAnimation)
 
-## Color
+<h2 id="Color"> Color </h2>
  - [reader](#reader)
  - [del_colors](#del_colors)
  - [show_all_rgb_colors](#show_all_rgb_colors)
@@ -105,10 +105,10 @@ print (CO.ColorName+'My text')
 print (CO.reader('[$ColorName]My text[$/]'))
 ```
 
-### Text
-### Square
-### Animation
-### ThreadAnimation
+<h2 id="Text"> Text </h2>
+<h2 id="Square"> Square </h2>
+<h2 id="Animation"> Animation </h2>
+<h2 id="ThreadAnimation"> ThreadAnimation </h2>
 
 
 <!-- ![Screenshot 2020-11-18 124019](https://user-images.githubusercontent.com/56244233/99627674-0de9ee00-2a35-11eb-8baf-16499800f9de.jpg) -->
