@@ -18,7 +18,10 @@ It is a library that contains a set of ready-made codes that enable you to creat
  - [Animation](#Animation)
  - [ThreadAnimation](#ThreadAnimation)
 
+---
+
 <h2 id="Color"> Color </h2>
+
  - [reader](#reader)
  - [del_colors](#del_colors)
  - [show_all_rgb_colors](#show_all_rgb_colors)
@@ -28,14 +31,14 @@ It is a class that allows you to colorize text professionally on the terminal.
 
 <div id="reader"> </div>
 Texts can be colored in two ways.
-first way by just adding the color to the text and second ways by using reader function.
+first way by just adding the color to the text and second way by using reader function.
 
 ```python
 from N4Tools.Design import Color
 CO = Color()
 
 # first
-print ('My '+CO.RED+'red'+' and '+CO.GREEN+'green'+' text')
+print ('My '+CO.RED+'red'+CO.NORMAL+' and '+CO.GREEN+'green'+CO.NORMAL+' text')
 
 # second
 print(CO.reader('My [$RED]red[$/] and [$GREEN]green[$/] text'))
@@ -49,7 +52,7 @@ CO = Color()
 pprint (CO.colors)
 
 for color in CO.colors.keys():
-    print (CO.reader(f'[${color}]{color}'))
+    print (CO.reader(f'[${color}]{color}[$/]'))
 ```
 
 <div id="del_colors"> </div>
@@ -104,8 +107,216 @@ CO.colors['ColorName'] = MyColor
 print (CO.ColorName+'My text')
 print (CO.reader('[$ColorName]My text[$/]'))
 ```
+---
 
 <h2 id="Text"> Text </h2>
+
+ - [get_size](#get_size)
+ - [del_padding](#del_padding)
+ - [pos](#pos)
+ - [CentreAlign](#CentreAlign)
+ - [CentreAlignPro](#CentreAlignPro)
+ - [Figlet](#Figlet)
+ - [FigletFonts](#FigletFonts)
+ - [mix](#mix)
+ - [full](#full)
+ - [equal](#equal)
+ - [arabic](#arabic)
+
+Text class gives you many possibilities in controlling texts.
+
+<div id="get_size"> </div>
+
+__get_size__ function give you the text size
+```python
+from N4Tools.Design import Text
+T = Text()
+
+example = 'text\ntext'
+
+print (T.get_size(example))
+```
+
+<div id="Figlet"> </div>
+<div id="FigletFonts"> </div>
+
+__Figlet__ function allows you to convert texts into large, beautifully patterned objects
+```python
+from N4Tools.Design import Text
+T = Text()
+
+print (T.Figlet('text',font='epic'))
+
+# All fonts:
+print (T.FigletFonts())
+```
+
+this is the output...
+```bash
+_________ _______          _________
+\__   __/(  ____ \|\     /|\__   __/
+   ) (   | (    \/( \   / )   ) (   
+   | |   | (__     \ (_) /    | |   
+   | |   |  __)     ) _ (     | |   
+   | |   | (       / ( ) \    | |   
+   | |   | (____/\( /   \ )   | |   
+   )_(   (_______/|/     \|   )_(
+```
+
+<div id="del_padding"> </div>
+
+__del_padding__ function it's help you to delete the spaces in your text.
+```python
+from N4Tools.Design import Text
+T = Text()
+
+example = '\n\n    text\n  text\n\n'
+print(T.del_padding(example))
+```
+
+<div id="pos"> </div>
+
+__pos__ function help you to change the the text postion.
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+my_text = 'name:mohamed\nage:18\nlanguage:python'
+print(T.pos(my_text,x=10))
+```
+
+<div id="CentreAlign"> </div>
+
+__CentreAlign__ function give you centre align text.
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+example = '''
+123456789
+1234567
+12345
+123
+1
+'''
+
+print (T.CentreAlign(example))
+```
+
+<div id="CentreAlignPro"> </div>
+
+__CentreAlignPro__ function give you centre align for a group texts.
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+group1 = '######################\n'*2
+group2 = '##################\n'*2
+group3 = '##############\n'*2
+
+print (T.CentreAlignPro([group1,group2,group3]))
+```
+
+<div id="mix"> </div>
+
+__mix__ function helps you to mix a big texts.
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+num1 = T.Figlet('1')
+num2 = T.Figlet('2')
+num3 = T.Figlet('3')
+
+# spacing
+print(T.mix([num1,num2,num3], spacing=6))
+
+# normal
+print (T.Figlet('123'))
+```
+
+this is the output...
+
+```bash
+ __          _______        ______  
+/  \        / ___   )      / ___  \ 
+\/) )       \/   )  |      \/   \  \
+  | |           /   )         ___) /
+  | |         _/   /         (___ ( 
+  | |        /   _/              ) \
+__) (_      (   (__/\      /\___/  /
+\____/      \_______/      \______/
+ __    _______  ______  
+/  \  / ___   )/ ___  \ 
+\/) ) \/   )  |\/   \  \
+  | |     /   )   ___) /
+  | |   _/   /   (___ ( 
+  | |  /   _/        ) \
+__) (_(   (__/\/\___/  /
+\____/\_______/\______/
+```
+
+<div id="full"> </div>
+
+__full__ function give you full texts list.
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+my_tools = ['N404-Tools','xshell','weeman','metasploit']
+print (T.full(my_tools))
+```
+this is the output...
+
+```bash
+[
+ 'N404-Tools',
+ 'xshell    ',
+ 'weeman    ',
+ 'metasploit',
+]
+```
+
+<div id="equal"> </div>
+
+__equal__ function give you full and centre align texts list.
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+my_tools = ['N404-Tools','xshell','weeman','metasploit']
+print (T.equal(my_tools))
+```
+this is the output...
+
+```bash
+[
+ 'N404-Tools',
+ '  xshell  ',
+ '  weeman  ',
+ 'metasploit',
+]
+```
+
+<div id="arabic"> </div>
+
+__arabic__ function help to print a arabic text on termux or kali.
+```python
+from N4Tools.Design import Text
+T = Text()
+
+text = 'مرحبا'
+print(T.arabic(text))
+```
+
+---
+
 <h2 id="Square"> Square </h2>
 <h2 id="Animation"> Animation </h2>
 <h2 id="ThreadAnimation"> ThreadAnimation </h2>
