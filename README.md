@@ -153,7 +153,7 @@ print (T.FigletFonts())
 ```
 
 this is the output...
-```bash
+```
 _________ _______          _________
 \__   __/(  ____ \|\     /|\__   __/
    ) (   | (    \/( \   / )   ) (   
@@ -242,7 +242,7 @@ print (T.Figlet('123'))
 
 this is the output...
 
-```bash
+```
  __          _______        ______  
 /  \        / ___   )      / ___  \ 
 \/) )       \/   )  |      \/   \  \
@@ -319,6 +319,96 @@ print(T.arabic(text))
 ---
 
 <h2 id="Square"> Square </h2>
+
+This class help you to make a square around the text.
+
+
+How to use?
+```python
+from N4Tools.Design import Square
+
+# base...
+def SQ(text):
+    Sq = Square()
+    # settings...
+    Sq.padding = [0,0,0,0]
+    Sq.color = '[$RED]'
+    return Sq.base(text)
+
+print (SQ('My Text'))
+print (SQ('My Text big text\n'*10))
+
+# pro...
+def SQPro(List):
+    Sq = Square()
+    # settings...
+    Sq.square = ['+','|','+','-','+','|','+','-']
+    Sq.cols = 3
+    Sq.spacing = 1
+    Sq.padding = [1,0,1,0]
+    Sq.equal = True
+    Sq.center = True
+    return Sq.style(List)
+
+print (SQPro(['Toosl']*12))
+```
+this is the output...
+
+```
+# base...
+╔═══════╗
+║My Text║
+╚═══════╝
+╔════════════════╗
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║My Text big text║
+║                ║
+╚════════════════╝
+
+# pro...
++-------+ +-------+ +-------+
+| Toosl | | Toosl | | Toosl |
++-------+ +-------+ +-------+
++-------+ +-------+ +-------+
+| Toosl | | Toosl | | Toosl |
++-------+ +-------+ +-------+
++-------+ +-------+ +-------+
+| Toosl | | Toosl | | Toosl |
++-------+ +-------+ +-------+
++-------+ +-------+ +-------+
+| Toosl | | Toosl | | Toosl |
++-------+ +-------+ +-------+
+```
+
+__set_settings__ function ... to controal the square setting.
+```python
+from N4Tools.Design import Square
+Sq = Square()
+Sq.set_settings({
+    'square':['╔', '║', '╚', '═', '╝', '║', '╗', '═'],
+    'spacing':0,
+    'padding':[0,0,0,0],
+    'color':'[$GREEN]',
+    'cols':0,
+    'equal':True,
+    'center':False,
+})
+# print (Sq.SETTINGS)
+
+print (Sq.style(['text']*4))
+print (Sq.base('text'))
+```
+
+---
+
 <h2 id="Animation"> Animation </h2>
 <h2 id="ThreadAnimation"> ThreadAnimation </h2>
 
