@@ -269,6 +269,23 @@ class Text:
         reshaped_text = arabic_reshaper.reshape(text)
         return get_display(reshaped_text)
 
+    def CInput(self,text,completer=lambda text,state:[],clear_history=True):
+        def _completer(text, state):
+            return [i for i in completer if i.startswith(text)][state]
+
+        import readline
+        if clear_history:
+            readline.clear_history()
+        if type(completer) == type(_completer):
+            readline.parse_and_bind("tab: complete")
+            readline.set_completer(completer)
+        elif type(completer) == list:
+            readline.parse_and_bind("tab: complete")
+            readline.set_completer(_completer)
+        else:
+            raise TypeError('completer accept only [ function or list ]')
+        return input(Color().reader(text))
+
 class Square:
     def __init__(self):
         self.SETTINGS = {
@@ -386,108 +403,97 @@ class Square:
         return Color().reader(output)
 
 class Animation:
-    def Loading(self,text='Loading...',anim=['/','-','\\','|']):
-        while True:
-            for i in anim:
-                yield text+i
-
-    def SlowText(self,text,timer=0.1):
+    def SlowText(self, text, timer=0.1):
         '''to write text by Index(System) slow motion'''
         for i in text:
             sys.stdout.write(i)
             sys.stdout.flush()
             time.sleep(timer)
 
-    def SlowLine(self,text,timer=0.5):
+    def SlowLine(self, text, timer=0.5):
         '''to write text by Line as slow motion'''
         for i in text.split('\n'):
             print(i)
             time.sleep(timer)
 
-class ThreadAnimation:
+    def DL(self,AT=['B#│','[$LGREEN]█','C#▒','B#│'],text='[$LWIHTE]Loading',t=0.2,width=25,end=False):
+        text = Color().reader(str(text))
+        AT = [Color().reader(str(i)) for i in AT]
+        y = width+1
+        for i in range(width+1):
+            sys.stdout.write('\r'+text+AT[0]+(i*AT[1])+(AT[2]*(y-1))+AT[3]+' ')
+            time.sleep(t)
+            y -= 1
+        if end:
+            print(Color().reader(end),end='')
+        elif end == False:
+            print('')
+
+
+class AnimationTools:
     def __init__(self):
-        self.kill = False
-        self.timer = .2
-        self.END = 'DONE...!'
-        self.ANIMATION = None
+        self.load_anim = self._load_anim()
 
-    def set_animation(self,ANIMATION,END=None):
-        '''
-        to set Animation.
-        example:
-        ... def MyAnimation():
-        ...     while True:
-        ...         for i in 'Loading':
-        ...             yield f'Loading...( {i} )'
-        ...
-        ... TA = ThreadAnimation()
-        ... TA.set_animation( MyAnimation(), END='DONE...!' )
-        ...
-        ... with TA:
-        ...     for i in range(10000000):
-        ...         pass
-        ... print (i)
-        '''
-        self.ANIMATION = ANIMATION
-        self.END = END if END != None else self.END
+    def _load_anim(self):
+        while True:
+            for i in ['/', '-', '\\', '|']:
+                yield i
 
-    def thread(self,func):
-        '''
-        function thread.
-        example:
-        ... TA = ThreadAnimation()
-        ... TA.set_animation( MyAnimation() )
-        ...
-        ... @TA.thread
-        ... def my_function():
-        ...     for i in range(10000000):
-        ...         pass
-        ...     return i
-        ...
-        ... print( my_function() )
+    def Loading(self, text='Loading...', anim=None):
+        anim = anim if anim else next(self.load_anim)
+        return [text+anim]
 
-        '''
-        def wrapper(*args,**kwargs):
-            self.__enter__()
-            rv = func(*args,**kwargs)
-            self.kill = True
-            self.THREAD_ANIM.join()
-            return rv
-        return wrapper
+AnimationTools = AnimationTools()
 
-    def __enter__(self):
-        '''
-        example:
-        ... TA = ThreadAnimation()
-        ... TA.set_animation( MyAnimation(), END='DONE...!' )
-        ...
-        ... with TA as thread:
-        ...     for i in range(10000000):
-        ...         pass
-        ...     print(thread.is_alive())
-        ...
-        ... print (thread.is_alive())
-        ... print (i)
-        '''
-        self.kill = False
-        def anim():
-            size = 0
-            for text in self.ANIMATION:
+class ThreadAnimation:
+    def __init__(self,Animation=AnimationTools.Loading,kwargs={},timer=.2):
+        self._kill = False
+        self.timer = timer
+        self.Animation = Animation
+        self.kwargs = kwargs
+
+    def kill(self):
+        self._kill = True
+        self.THREAD_ANIM.join()
+
+    def set_end(self,text):
+        self.END = Color().reader(str(text))
+
+    def set_kwargs(self,**kwargs):
+        self.kwargs = kwargs
+
+    def _anim(self):
+        size = 0
+        while True:
+            try:
+                _Animation = self.Animation(**self.kwargs)
+            except:
+                _Animation = self.Animation()
+
+            for text in _Animation:
                 text = Color().reader(text+'[$NORMAL]')
-                if self.kill:
-                    print('\r'+self.END+' '*(size-len(self.END) if len(self.END) < size else 0))
-                    break
-
+                if self._kill:break
                 sys.stdout.write('\r'+text)
                 size = len(Color().del_colors(text))
                 time.sleep(self.timer)
+            if self._kill:
+                try:
+                    print('\r' + self.END + ' ' * (size - len(self.END) if len(self.END) < size else 0))
+                except AttributeError:
+                    print('\r' + ' ' * size, end='\r')
+                break
 
-        self.THREAD_ANIM = threading.Thread(target=anim)
+    def start_loop(self):
+        self._kill = False
+        self.THREAD_ANIM = threading.Thread(target=self._anim)
         self.THREAD_ANIM.daemon = True
         self.THREAD_ANIM.start()
 
-        return self.THREAD_ANIM
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.kill = True
-        self.THREAD_ANIM.join()
+    def __call__(self, func, *args, **kwargs):
+        def wrapper(*args, **kwargs):
+            self.start_loop()
+            rv = func(self,*args, **kwargs)
+            self._kill = True
+            self.THREAD_ANIM.join()
+            return rv
+        return wrapper

@@ -1,0 +1,3 @@
+pyfiglet
+arabic_reshaper
+python-bidi
