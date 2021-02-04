@@ -1,3 +1,4 @@
+# N4Tools version 1.7.1
 from N4Tools.Design import Color
 from pprint import pprint
 

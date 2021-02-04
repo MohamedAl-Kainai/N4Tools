@@ -1,16 +1,9 @@
+# N4Tools version:1.7.1
 from N4Tools.Design import ThreadAnimation,Square,Color,Animation
 from requests import get
 
-TA = ThreadAnimation()
-TA.set_animation(
-    Animation().Loading(
-        text='[$GREEN]Loading...',
-        anim=['/','-','\\','|'],
-    )
-)
-
-@TA.thread
-def MyIpInfo():
+@ThreadAnimation()
+def MyIpInfo(Thread):
     r = get('http://ipinfo.io/json')
     end = ''
     for key,val in r.json().items():
@@ -32,6 +25,7 @@ def MyIpInfo():
         '  |',
         '[$LBLUE][[$LGREEN]+[$LBLUE]]',
         '-']
-    TA.END = Sq.style([end])
+    Thread.kill()
+    print (Sq.style([end]))
 
 MyIpInfo()

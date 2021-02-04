@@ -1,3 +1,4 @@
+# N4Tools version 1.7.1
 import random, os, time
 from N4Tools.Design import Square,Text
 size = 12
@@ -39,8 +40,8 @@ while True:
         dataY += '\n'
 
     x = Sq.base(dataX[:-1])
-    y = Sq.base(dataY[:-1])                                                                                                                                print (Text().mix([x,y],spacing=2))
+    y = Sq.base(dataY[:-1])
+    print (Text().mix([x,y],spacing=2))
     print (f'[x:{allX}, y:{allY}] [equal:{equal}] [{round(percentage(equal,allX+allY))} % 100]        ')
     time.sleep(.5)
-#    input()
     print(chr(27)+'[H',end='')

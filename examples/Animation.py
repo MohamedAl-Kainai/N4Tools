@@ -1,27 +1,40 @@
-from N4Tools.Design import Animation,ThreadAnimation
-import time
+# N4Tools version:1.7.1
+from N4Tools.Design import (
+	ThreadAnimation,
+	Animation,
+	AnimationTools
+)
+import requests
 
-Anim = Animation()
+A = Animation()
 
-def MyLoadingAnimation(timer=1,end_msg='DONE!'):
-    TA = ThreadAnimation()
-    TA.set_animation(
-        Anim.Loading(),
-        END=end_msg,
-    )
-    with TA:
-        time.sleep(timer)
+@ThreadAnimation(Animation=A.Prograsse,kwargs={'min':0,'max':30})
+def check_url(Thread,urls):
+	result = []
+	for index,url in enumerate(urls):
+		Thread.set_kwargs(min=index+1,max=len(urls))
+		req = requests.get(url)
+		result.append([url,req.ok])
+	style = ''
+	for url,state in result:
+		style += url+': '+str(state)+'\n'
+	Thread.kill()
+	print (style[:-1])
 
-def MyProInput(text):
-    Anim.SlowText(text)
-    return input()
+check_url(['https://google.com']*10)
 
 
-if __name__ == '__main__':
-    MyLoadingAnimation(timer=2,end_msg='DONE!')
+text_animation = AnimationTools.set_text_anim('Loading...')
+@ThreadAnimation(Animation=A.Loading,kwargs={'text':text_animation})
+def check_url(Thread,urls):
+	result = []
+	for index,url in enumerate(urls):
+		req = requests.get(url)
+		result.append([url,req.ok])
+	style = ''
+	for url,state in result:
+		style += url+': '+str(state)+'\n'
+	Thread.kill()
+	print (style[:-1])
 
-    name = MyProInput('Enter name: ')
-    print (name)
-
-    Anim.SlowLine(('text '*10+'\n')*10,timer=0.1)
-
+check_url(['https://google.com']*10)

@@ -287,6 +287,13 @@ class Text:
         return input(Color().reader(text))
 
 class Square:
+    square=['╔', '║', '╚', '═', '╝', '║', '╗', '═']
+    spacing=0
+    padding= [0, 0, 0, 0]
+    color=''
+    cols=0
+    equal=True
+    center=False
     def __init__(self):
         self.SETTINGS = {
             'square':['╔', '║', '╚', '═', '╝', '║', '╗', '═'],
@@ -402,6 +409,26 @@ class Square:
         output += '\n'+CO+SQUARE[2]+CO+(SQUARE[3]*text_size['width'])+CO+SQUARE[4]+'[$NORMAL]' # .... ╚═════╝
         return Color().reader(output)
 
+class AnimationTools:
+    def __init__(self):
+        self.load_anim = self.set_load_anim(['/', '-', '\\', '|'])
+        self.text_anim = self.set_text_anim('Loading')
+
+    def set_load_anim(self,List):
+        while True:
+            for i in List:
+                yield i
+
+    def set_text_anim(self,text):
+        while True:
+            for i in range(0,len(text)):
+                t1 = text[:i]
+                t2 = text[i].upper() if text[i] != text[i].upper() else text[i].lower()
+                t3 = text[i+1:]
+                yield t1+t2+t3
+
+AnimationTools = AnimationTools()
+
 class Animation:
     def SlowText(self, text, timer=0.1):
         '''to write text by Index(System) slow motion'''
@@ -416,38 +443,20 @@ class Animation:
             print(i)
             time.sleep(timer)
 
-    def DL(self,AT=['B#│','[$LGREEN]█','C#▒','B#│'],text='[$LWIHTE]Loading',t=0.2,width=25,end=False):
-        text = Color().reader(str(text))
-        AT = [Color().reader(str(i)) for i in AT]
-        y = width+1
-        for i in range(width+1):
-            sys.stdout.write('\r'+text+AT[0]+(i*AT[1])+(AT[2]*(y-1))+AT[3]+' ')
-            time.sleep(t)
-            y -= 1
-        if end:
-            print(Color().reader(end),end='')
-        elif end == False:
-            print('')
-
-
-class AnimationTools:
-    def __init__(self):
-        self.load_anim = self._load_anim()
-
-    def _load_anim(self):
-        while True:
-            for i in ['/', '-', '\\', '|']:
-                yield i
-
-    def Loading(self, text='Loading...', anim=None):
-        anim = anim if anim else next(self.load_anim)
+    def Loading(self, text='Loading...'):
+        if str(type(text)) == "<class 'generator'>":
+            text = next(text)
+        anim = next(AnimationTools.load_anim)
         return [text+anim]
 
-AnimationTools = AnimationTools()
+    def Prograsse(self,prograsse=['│','█','▒','│'],text='Loading',width=24,min=1,max=10):
+        text = Color().reader(str(text))
+        prograsse = [Color().reader(str(i)) for i in prograsse]
+        i = width*min//max
+        return ['\r'+text+prograsse[0]+(i*prograsse[1])+(prograsse[2]*(width-i))+prograsse[3]+' ']
 
 class ThreadAnimation:
-    def __init__(self,Animation=AnimationTools.Loading,kwargs={},timer=.2):
-        self._kill = False
+    def __init__(self,Animation=Animation().Loading,kwargs={},timer=.2):
         self.timer = timer
         self.Animation = Animation
         self.kwargs = kwargs
@@ -465,11 +474,7 @@ class ThreadAnimation:
     def _anim(self):
         size = 0
         while True:
-            try:
-                _Animation = self.Animation(**self.kwargs)
-            except:
-                _Animation = self.Animation()
-
+            _Animation = self.Animation(**self.kwargs)
             for text in _Animation:
                 text = Color().reader(text+'[$NORMAL]')
                 if self._kill:break
@@ -477,10 +482,11 @@ class ThreadAnimation:
                 size = len(Color().del_colors(text))
                 time.sleep(self.timer)
             if self._kill:
+                print('\r' + (' ' *size),end='\r')
                 try:
-                    print('\r' + self.END + ' ' * (size - len(self.END) if len(self.END) < size else 0))
+                    print('\r' + self.END)
                 except AttributeError:
-                    print('\r' + ' ' * size, end='\r')
+                    pass
                 break
 
     def start_loop(self):
