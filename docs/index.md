@@ -9,13 +9,14 @@
 </p>
 
 ### What is N4Tools?
-It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs on the terminal.
+It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs and animations on the terminal.
 
 ### N4Tools API
  - [Color](#Color)
  - [Text](#Text)
  - [Square](#Square)
  - [Animation](#Animation)
+ - [AnimationTools](#AnimationTools)
  - [ThreadAnimation](#ThreadAnimation)
 
 ---
@@ -408,6 +409,7 @@ print (Sq.base('text'))
 
 ---
 <h2 id="Animation"> Animation </h2>
+<h2 id="AnimationTools"> AnimationTools </h2>
 <h2 id="ThreadAnimation"> ThreadAnimation </h2>
 
 
