@@ -27,4 +27,4 @@ pip3 install git+https://github.com/No-Name-404/N4Tools
 I don't recommend regular users to download the developer version
 
 <h3 align="center">For more infrmation</h3>
-<a href="https://no-name-404.github.io/N4Tools"><h3 align="center">N4Tools</h3></a>
+<h3 align="center"><a href="https://no-name-404.github.io/N4Tools">N4Tools</a></h3>
