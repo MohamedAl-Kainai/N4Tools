@@ -9,7 +9,7 @@
 </p>
 
 ### What is N4Tools?
-It is a library that contains a set of ready-made codes that enable you to create the most wonderful designs and animations on the terminal.
+It is a python library that contains a set of ready-made codes that enable you to create the most wonderful designs and animations on the terminal.
 
 ### N4Tools API
  - [Color](#Color)
@@ -123,6 +123,7 @@ print (CO.reader('[$ColorName]My text[$/]'))
  - [full](#full)
  - [equal](#equal)
  - [arabic](#arabic)
+ - [CInput](#CInput)
 
 Text class gives you many possibilities in controlling texts.
 
@@ -153,7 +154,7 @@ print (T.FigletFonts())
 ```
 
 this is the output...
-```
+```text
 _________ _______          _________
 \__   __/(  ____ \|\     /|\__   __/
    ) (   | (    \/( \   / )   ) (   
