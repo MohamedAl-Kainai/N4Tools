@@ -29,7 +29,9 @@ ___
 
 <p align="center">
 <strong>For more infrmation</strong>
-<a href="https://no-name-404.github.io/N4Tools"><label style="display: block;"><strong>N4Tools</strong></label></a>
 </p>
 
+<p align="center">
+<a href="https://no-name-404.github.io/N4Tools"><label style="display: block;"><strong>N4Tools</strong></label></a>
+</p>
 ___
