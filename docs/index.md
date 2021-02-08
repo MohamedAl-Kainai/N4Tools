@@ -30,7 +30,7 @@
 
 هاذا الكلاس يسمح لك بتلوين النصوص بشكل احترافي. 
 <div id="reader"> </div>
-#### reader
+reader
 
 يمكنك تلوين النصوص بطريقتين إما ان تستخدم داله "القارئ" او تستخدم علامة الزايد
 
@@ -60,7 +60,7 @@ for color in CO.colors.keys():
 
 
 <div id="del_colors"> </div>
-#### del_colors
+del_colors
 
 لحذف كل الألوان التي في النص
 
@@ -78,7 +78,7 @@ print(text)
 
 
 <div id="show_all_rgb_colors"> </div>
-#### show_all_rgb_colors
+show_all_rgb_colors
 
 لعرض كل الألوان التي تدعمها المكتبه
 rgb
@@ -92,7 +92,7 @@ CO.show_all_rgb_colors()
 
 
 <div id="rgb"> </div>
-#### rgb
+rgb
 
 إنشاء لوني الخاص
 
@@ -147,7 +147,7 @@ print (CO.reader('[$ColorName]My text[$/]'))
 
 <div id="get_size"> </div>
 
-#### get_size
+get_size
 
 هذه الدالة تجلب لك طول وعرض النص
 ```python
@@ -162,7 +162,7 @@ print (T.get_size(example))
 <div id="Figlet"> </div>
 <div id="FigletFonts"> </div>
 
-#### Figlet
+Figlet
 
 تتيح لك هذه الدالة تحويل النصوص إلى كائنات كبيرة ذات نقوش جميلة 
 ```python
