@@ -175,7 +175,7 @@ print (T.Figlet('text',font='epic'))
 print (T.FigletFonts())
 ```
 
-this is the output...
+Output:
 ```text
 _________ _______          _________
 \__   __/(  ____ \|\     /|\__   __/
@@ -189,7 +189,9 @@ _________ _______          _________
 
 <div id="del_padding"> </div>
 
-__del_padding__ function it's help you to delete the spaces in your text.
+del_padding
+
+لحذف المسافات او السطور الزائده في النص
 ```python
 from N4Tools.Design import Text
 T = Text()
@@ -200,8 +202,9 @@ print(T.del_padding(example))
 
 <div id="pos"> </div>
 
-__pos__ function help you to change the the text postion.
+pos
 
+تسمح لك هذه الدالة بتغيير موقع النص
 ```python
 from N4Tools.Design import Text
 T = Text()
@@ -212,7 +215,9 @@ print(T.pos(my_text,x=10))
 
 <div id="CentreAlign"> </div>
 
-__CentreAlign__ function give you centre align text.
+CentreAlign
+
+هذه الداله تعطيك مركز محاذاة النص.
 
 ```python
 from N4Tools.Design import Text
@@ -231,8 +236,9 @@ print (T.CentreAlign(example))
 
 <div id="CentreAlignPro"> </div>
 
-__CentreAlignPro__ function give you centre align for a group texts.
+CentreAlignPro
 
+هذه الداله تعطيك مركز محاذاة النصوص على شكل مجموعات.
 ```python
 from N4Tools.Design import Text
 T = Text()
@@ -246,7 +252,9 @@ print (T.CentreAlignPro([group1,group2,group3]))
 
 <div id="mix"> </div>
 
-__mix__ function helps you to mix a big texts.
+mix
+
+هذه الداله تسمح لك بجمع نصين كبيرين او اكثر مع بعض.
 
 ```python
 from N4Tools.Design import Text
@@ -263,7 +271,7 @@ print(T.mix([num1,num2,num3], spacing=6))
 print (T.Figlet('123'))
 ```
 
-this is the output...
+Outbut:
 
 ```
  __          _______        ______  
