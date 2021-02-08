@@ -30,6 +30,8 @@
 
 هاذا الكلاس يسمح لك بتلوين النصوص بشكل احترافي. 
 <div id="reader"> </div>
+__reader__
+
 يمكنك تلوين النصوص بطريقتين إما ان تستخدم داله "القارئ" او تستخدم علامة الزايد
 
 ```python
@@ -42,6 +44,8 @@ print ('My '+CO.RED+'red'+CO.NORMAL+' and '+CO.GREEN+'green'+CO.NORMAL+' text')
 # وفي هاذا المثال استخدمه داله القارئ
 print(CO.reader('My [$RED]red[$/] and [$GREEN]green[$/] text'))
 ```
+
+
 لعرض كل الألوان التي تدعمها المكتبه
 ```python
 from N4Tools.Design import Color
@@ -54,7 +58,10 @@ for color in CO.colors.keys():
     print (CO.reader(f'[${color}]{color}[$/]'))
 ```
 
+
 <div id="del_colors"> </div>
+__del_colors__
+
 لحذف كل الألوان التي في النص
 
 ```python
@@ -68,7 +75,11 @@ print(text)
 text = CO.del_colors(text)
 print(text)
 ```
+
+
 <div id="show_all_rgb_colors"> </div>
+__show_all_rgb_colors__
+
 لعرض كل الألوان التي تدعمها المكتبه
 rgb
 
@@ -79,7 +90,10 @@ CO = Color()
 CO.show_all_rgb_colors()
 ```
 
+
 <div id="rgb"> </div>
+__rgb__
+
 إنشاء لوني الخاص
 
 ```python
@@ -94,6 +108,8 @@ print(text)
 text = CO.rgb(203,type='BG')+'MyText'
 print(text)
 ```
+
+
 كيف أضيف لوني الخاص إلى دالة القارئ؟
 
 ```python
@@ -127,11 +143,13 @@ print (CO.reader('[$ColorName]My text[$/]'))
  - [arabic](#arabic)
  - [CInput](#CInput)
 
-Text class gives you many possibilities in controlling texts.
+يمنحك كلاس النص العديد من الطرق لي التحكم في النصوص.
 
 <div id="get_size"> </div>
 
-__get_size__ function give you the text size
+__get_size__
+
+هذه الدالة تجلب لك طول وعرض النص
 ```python
 from N4Tools.Design import Text
 T = Text()
@@ -144,7 +162,9 @@ print (T.get_size(example))
 <div id="Figlet"> </div>
 <div id="FigletFonts"> </div>
 
-__Figlet__ function allows you to convert texts into large, beautifully patterned objects
+__Figlet__
+
+تتيح لك هذه الدالة تحويل النصوص إلى كائنات كبيرة ذات نقوش جميلة 
 ```python
 from N4Tools.Design import Text
 T = Text()
