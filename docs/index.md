@@ -9,7 +9,7 @@
 </p>
 
 ### What is N4Tools?
-It is a python library that contains a set of ready-made codes that enable you to create the most wonderful designs and animations on the terminal.
+إنها مكتبة بايثون تحتوي على مجموعة من الأكواد الجاهزة التي تمكنك من إنشاء أروع التصاميم والرسوم المتحركة على الترمنال.
 
 ### N4Tools API
  - [Color](#Color)
@@ -28,23 +28,21 @@ It is a python library that contains a set of ready-made codes that enable you t
  - [show_all_rgb_colors](#show_all_rgb_colors)
  - [rgb](#rgb)
 
-It is a class that allows you to colorize text professionally on the terminal.
-
+هاذا الكلاس يسمح لك بتلوين النصوص بشكل احترافي. 
 <div id="reader"> </div>
-Texts can be colored in two ways.
-first way by just adding the color to the text and second way by using reader function.
+يمكنك تلوين النصوص بطريقتين إما ان تستخدم داله "القارئ" او تستخدم علامة الزايد
 
 ```python
 from N4Tools.Design import Color
 CO = Color()
 
-# first
+# في هاذا المثال استخدمه علامة الزايد
 print ('My '+CO.RED+'red'+CO.NORMAL+' and '+CO.GREEN+'green'+CO.NORMAL+' text')
 
-# second
+# وفي هاذا المثال استخدمه داله القارئ
 print(CO.reader('My [$RED]red[$/] and [$GREEN]green[$/] text'))
 ```
-All color.
+لعرض كل الألوان التي تدعمها المكتبه
 ```python
 from N4Tools.Design import Color
 from pprint import pprint
@@ -57,7 +55,7 @@ for color in CO.colors.keys():
 ```
 
 <div id="del_colors"> </div>
-Delete colors from text.
+لحذف كل الألوان التي في النص
 
 ```python
 from N4Tools.Design import Color
@@ -71,7 +69,8 @@ text = CO.del_colors(text)
 print(text)
 ```
 <div id="show_all_rgb_colors"> </div>
-All colors rgb that N4Tools support.
+لعرض كل الألوان التي تدعمها المكتبه
+rgb
 
 ```python
 from N4Tools.Design import Color
@@ -81,19 +80,22 @@ CO.show_all_rgb_colors()
 ```
 
 <div id="rgb"> </div>
-Create my rgb color.
+إنشاء لوني الخاص
 
 ```python
 from N4Tools.Design import Color
 CO = Color()
 
+# لون النص
 text = CO.rgb(203,type='FG')+'MyText'
 print(text)
 
+# لون الخلفيه
 text = CO.rgb(203,type='BG')+'MyText'
 print(text)
 ```
-How to add rgb colors to reader function?
+كيف أضيف لوني الخاص إلى دالة القارئ؟
+
 ```python
 from N4Tools.Design import Color
 CO = Color()
