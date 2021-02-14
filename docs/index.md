@@ -294,7 +294,9 @@ __) (_(   (__/\/\___/  /
 
 <div id="full"> </div>
 
-__full__ function give you full texts list.
+full
+
+هذه الدالة تقوم بملئ الفراغات في الكلمات وتعطيك طول متساوي لجميع الكلمات
 
 ```python
 from N4Tools.Design import Text
@@ -303,7 +305,7 @@ T = Text()
 my_tools = ['N404-Tools','xshell','weeman','metasploit']
 print (T.full(my_tools))
 ```
-this is the output...
+Outbut:
 
 ```bash
 [
@@ -316,7 +318,9 @@ this is the output...
 
 <div id="equal"> </div>
 
-__equal__ function give you full and centre align texts list.
+equal
+
+هذه الداله تشبه الداله السابقة ولاكن تقوم بتوسيط الكلمات
 
 ```python
 from N4Tools.Design import Text
@@ -325,7 +329,7 @@ T = Text()
 my_tools = ['N404-Tools','xshell','weeman','metasploit']
 print (T.equal(my_tools))
 ```
-this is the output...
+Outbut:
 
 ```bash
 [
@@ -338,7 +342,10 @@ this is the output...
 
 <div id="arabic"> </div>
 
-__arabic__ function help to print a arabic text on termux or kali.
+arabic
+
+هذه الداله تقوم بإعادة تشكيل الحروف العربية ويمكنك استخدامها في الكتابه بلغة العربية على ترمكس او اي نظام لا يدعم اللغة العربية
+
 ```python
 from N4Tools.Design import Text
 T = Text()
@@ -347,7 +354,20 @@ text = 'مرحبا'
 print(T.arabic(text))
 ```
 
----
+<div id="arabic"> </div>
+
+CInput
+
+هذه الداله تسمح لك بل مرور بين الحروف مثل الشل تماماً
+
+```python
+from N4Tools.Design import Text
+T = Text()
+
+text = T.CInput("Enter text: ")
+print(text)
+```
+---٣٢
 
 <h2 id="Square"> Square </h2>
 
